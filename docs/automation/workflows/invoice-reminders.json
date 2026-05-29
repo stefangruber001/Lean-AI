@@ -1,0 +1,195 @@
+{
+  "name": "Lean-AI — Invoice Reminders & Dunning",
+  "meta": {
+    "description": "Runs daily, reads open invoices from a source (Google Sheet / CRM / invoicing tool), computes days overdue, and sends the correct German dunning stage (Zahlungserinnerung -> 1. Mahnung -> 2. Mahnung). The 3. Mahnung / Mahnverfahren escalation is intentionally left as a human decision (notification only). Configure data source + email credentials before activating.",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "days", "triggerAtHour": 8 }] }
+      },
+      "id": "node-cron",
+      "name": "Every Morning 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {
+        "content": "## Data source\nReplace this node with your real source of open invoices (Google Sheets, Lexoffice/sevDesk API, CRM, etc.).\nEach item must expose: invoice_no, client_name, client_email, amount, due_date, status (open/paid).\n\nThis Set node emits sample rows so you can test the logic immediately.",
+        "height": 240,
+        "width": 360
+      },
+      "id": "node-note",
+      "name": "Setup Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 540]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"invoices\": [\n    { \"invoice_no\": \"2026-001\", \"client_name\": \"[Client]\", \"client_email\": \"ap@client.de\", \"amount\": 6000, \"due_date\": \"2026-05-10\", \"status\": \"open\" }\n  ]\n}",
+        "options": {}
+      },
+      "id": "node-source",
+      "name": "Open Invoices (replace)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 320]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "invoices",
+        "options": {}
+      },
+      "id": "node-split",
+      "name": "Split Invoices",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [680, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d1",
+              "name": "days_overdue",
+              "value": "={{ Math.floor((Date.now() - new Date($json.due_date).getTime()) / 86400000) }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-days",
+      "name": "Compute Days Overdue",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": { "typeValidation": "loose" },
+                "conditions": [
+                  { "id": "r1", "leftValue": "={{ $json.days_overdue }}", "rightValue": 20, "operator": { "type": "number", "operation": "gte" } }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "2. Mahnung"
+            },
+            {
+              "conditions": {
+                "options": { "typeValidation": "loose" },
+                "conditions": [
+                  { "id": "r2", "leftValue": "={{ $json.days_overdue }}", "rightValue": 10, "operator": { "type": "number", "operation": "gte" } }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "1. Mahnung"
+            },
+            {
+              "conditions": {
+                "options": { "typeValidation": "loose" },
+                "conditions": [
+                  { "id": "r3", "leftValue": "={{ $json.days_overdue }}", "rightValue": 1, "operator": { "type": "number", "operation": "gte" } }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "Erinnerung"
+            }
+          ]
+        },
+        "options": { "fallbackOutput": "extra" }
+      },
+      "id": "node-switch",
+      "name": "Dunning Stage",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "={{ $json.client_email }}",
+        "subject": "Zahlungserinnerung — Rechnung {{ $json.invoice_no }}",
+        "emailFormat": "text",
+        "text": "Sehr geehrte Damen und Herren,\n\nsicher ist es Ihrer Aufmerksamkeit entgangen: Rechnung {{ $json.invoice_no }} über {{ $json.amount }} EUR ist seit dem {{ $json.due_date }} fällig. Wir bitten um Ausgleich innerhalb der nächsten Tage.\n\nSollten Sie die Zahlung bereits veranlasst haben, betrachten Sie diese Erinnerung als gegenstandslos.\n\nMit freundlichen Grüßen\nLean-AI — hello@lean-ai.com",
+        "options": {}
+      },
+      "id": "node-erinnerung",
+      "name": "Send Zahlungserinnerung",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 180]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "={{ $json.client_email }}",
+        "subject": "1. Mahnung — Rechnung {{ $json.invoice_no }}",
+        "emailFormat": "text",
+        "text": "Sehr geehrte Damen und Herren,\n\ntrotz unserer Erinnerung ist Rechnung {{ $json.invoice_no }} über {{ $json.amount }} EUR weiterhin offen (fällig seit {{ $json.due_date }}). Wir bitten um Zahlung innerhalb von 7 Tagen.\n\nMit freundlichen Grüßen\nLean-AI — hello@lean-ai.com",
+        "options": {}
+      },
+      "id": "node-mahnung1",
+      "name": "Send 1. Mahnung",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 320]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "={{ $json.client_email }}",
+        "subject": "2. Mahnung — Rechnung {{ $json.invoice_no }}",
+        "emailFormat": "text",
+        "text": "Sehr geehrte Damen und Herren,\n\nRechnung {{ $json.invoice_no }} über {{ $json.amount }} EUR ist trotz Mahnung weiterhin nicht ausgeglichen. Sie befinden sich in Verzug; wir behalten uns die Berechnung von Verzugszinsen vor. Wir bitten um Zahlung binnen 7 Tagen.\n\nMit freundlichen Grüßen\nLean-AI — hello@lean-ai.com",
+        "options": {}
+      },
+      "id": "node-mahnung2",
+      "name": "Send 2. Mahnung",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 460]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "hello@lean-ai.com",
+        "subject": "[ACTION] Invoice {{ $json.invoice_no }} >30 days overdue — decide on 3. Mahnung / Mahnverfahren",
+        "emailFormat": "text",
+        "text": "Invoice {{ $json.invoice_no }} ({{ $json.client_name }}, {{ $json.amount }} EUR) is {{ $json.days_overdue }} days overdue. Human decision required: 3. Mahnung, gerichtliches Mahnverfahren, or call the client.",
+        "options": {}
+      },
+      "id": "node-escalate",
+      "name": "Notify Founder (escalation)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 600]
+    }
+  ],
+  "connections": {
+    "Every Morning 08:00": { "main": [[{ "node": "Open Invoices (replace)", "type": "main", "index": 0 }]] },
+    "Open Invoices (replace)": { "main": [[{ "node": "Split Invoices", "type": "main", "index": 0 }]] },
+    "Split Invoices": { "main": [[{ "node": "Compute Days Overdue", "type": "main", "index": 0 }]] },
+    "Compute Days Overdue": { "main": [[{ "node": "Dunning Stage", "type": "main", "index": 0 }]] },
+    "Dunning Stage": {
+      "main": [
+        [{ "node": "Send 2. Mahnung", "type": "main", "index": 0 }, { "node": "Notify Founder (escalation)", "type": "main", "index": 0 }],
+        [{ "node": "Send 1. Mahnung", "type": "main", "index": 0 }],
+        [{ "node": "Send Zahlungserinnerung", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "lean-ai" }]
+}
+

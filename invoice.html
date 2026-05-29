@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lean-AI — Invoice generator</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0E1116; --ink-2:#161B22; --bone:#F7F4ED; --paper:#FBFAF6;
+    --text:#1B1F24; --soft:#515961; --line:#E2DCD0; --gold:#B68A3E; --gold-soft:#C8A35B;
+    --serif:"Fraunces",Georgia,serif; --sans:"Inter",-apple-system,system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);color:var(--text);background:#E9E5DB;line-height:1.55;font-size:15px}
+
+  /* ---- control bar ---- */
+  .bar{position:sticky;top:0;z-index:20;background:var(--ink);color:var(--bone);
+    display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;padding:.8rem 1.2rem}
+  .bar h1{font-family:var(--serif);font-weight:500;font-size:1.05rem;letter-spacing:.18em;margin-right:auto}
+  .bar .hint{font-size:.8rem;color:#9aa3ac;width:100%;order:3}
+  button{font-family:var(--sans);font-weight:600;font-size:.85rem;cursor:pointer;border:1px solid transparent;border-radius:100px;padding:.55em 1.1em;transition:.2s}
+  .btn-print{background:var(--gold);color:#fff}
+  .btn-print:hover{background:#9d7531}
+  .btn-add,.btn-reset{background:transparent;color:var(--bone);border-color:#39414b}
+  .btn-add:hover,.btn-reset:hover{background:#222a33}
+
+  /* ---- page ---- */
+  .sheet{background:#fff;max-width:820px;margin:1.6rem auto;padding:clamp(28px,5vw,56px);
+    box-shadow:0 24px 60px -30px rgba(0,0,0,.45);border-radius:4px}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;border-bottom:2px solid var(--ink);padding-bottom:1.4rem}
+  .brand{display:flex;align-items:center;gap:.55em}
+  .brand .mark{width:34px;height:34px;border-radius:8px;background:var(--ink);display:grid;place-items:center}
+  .brand .word{font-family:var(--serif);font-weight:600;font-size:1.25rem;letter-spacing:.22em}
+  .brand small{display:block;font-family:var(--sans);font-size:.62rem;letter-spacing:.14em;color:var(--soft);text-transform:uppercase;margin-top:2px}
+  .doc-title{text-align:right}
+  .doc-title h2{font-family:var(--serif);font-weight:500;font-size:1.9rem;letter-spacing:.02em}
+  .doc-title .meta{font-size:.85rem;color:var(--soft);margin-top:.3rem}
+
+  .parties{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:1.8rem 0}
+  .parties h3{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+  [contenteditable]{outline:none}
+  [contenteditable]:focus{background:#FBF6EA;box-shadow:0 0 0 2px var(--gold-soft);border-radius:3px}
+  .ed{min-height:1.2em}
+
+  table{width:100%;border-collapse:collapse;margin-top:.6rem}
+  thead th{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);text-align:left;padding:.6rem .5rem;border-bottom:1px solid var(--line)}
+  thead th.num,tbody td.num{text-align:right}
+  tbody td{padding:.55rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody td.desc{width:46%}
+  .row-del{cursor:pointer;color:#c0392b;font-weight:700;border:0;background:none;padding:0 .3em}
+  @media print{.row-del{display:none}}
+
+  .totals{margin-left:auto;width:min(320px,100%);margin-top:1rem}
+  .totals .line{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.95rem}
+  .totals .grand{border-top:2px solid var(--ink);margin-top:.4rem;padding-top:.6rem;font-family:var(--serif);font-size:1.25rem}
+  .vat-note{font-size:.82rem;color:var(--soft);margin-top:.8rem;font-style:italic}
+
+  .terms{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.2rem;font-size:.85rem;color:var(--soft)}
+  .terms h3{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;font-family:var(--sans)}
+  .foot{margin-top:1.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;font-size:.74rem;color:var(--soft);border-top:1px solid var(--line);padding-top:1rem}
+  .foot b{display:block;color:var(--text);font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.2rem}
+
+  .toggle{display:flex;align-items:center;gap:.4em;font-size:.8rem;color:var(--bone)}
+  input[type=number]{width:90px;font-family:var(--sans);font-size:.95rem;border:1px solid var(--line);border-radius:4px;padding:.3em .4em;text-align:right}
+  td input[type=number]{width:70px}
+  td .qty{width:56px}
+
+  @media print{
+    body{background:#fff}
+    .bar{display:none}
+    .sheet{box-shadow:none;margin:0;max-width:none;border-radius:0;padding:0}
+    @page{margin:18mm}
+  }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <h1>LEAN-AI · INVOICE</h1>
+    <label class="toggle"><input type="checkbox" id="kleinunternehmer" /> Kleinunternehmer (§19 UStG — no VAT)</label>
+    <label class="toggle">VAT&nbsp;%&nbsp;<input type="number" id="vatRate" value="19" min="0" max="100" step="0.1" style="width:64px" /></label>
+    <button class="btn-add" id="addRow">+ Add line</button>
+    <button class="btn-reset" id="reset">Reset</button>
+    <button class="btn-print" id="print">Print / Save PDF</button>
+    <p class="hint">Everything on the white sheet is editable — click any text to change it. Values save in this browser. This produces a German §14 UStG-style invoice; confirm exact wording with your Steuerberater.</p>
+  </div>
+
+  <div class="sheet" id="sheet">
+    <div class="head">
+      <div class="brand">
+        <span class="mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 19 L9 13 L13 16 L20 6" stroke="#C8A35B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="6" r="2" fill="#C8A35B"/></svg>
+        </span>
+        <span>
+          <span class="word">LEAN-AI</span>
+          <small>The operating partner for the AI era</small>
+        </span>
+      </div>
+      <div class="doc-title">
+        <h2>Rechnung</h2>
+        <div class="meta">
+          Invoice&nbsp;No&nbsp;<span class="ed" contenteditable data-k="invNo">2026-001</span><br>
+          Date&nbsp;<span class="ed" contenteditable data-k="invDate">26.05.2026</span><br>
+          Service period&nbsp;<span class="ed" contenteditable data-k="period">May 2026</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="parties">
+      <div>
+        <h3>From</h3>
+        <div class="ed" contenteditable data-k="from">[Founder legal name]<br>Lean-AI — [Einzelunternehmen]<br>[Street, No.]<br>[ZIP City], Germany<br>USt-IdNr: [DE000000000]<br>hello@lean-ai.com</div>
+      </div>
+      <div>
+        <h3>Bill to</h3>
+        <div class="ed" contenteditable data-k="to">[Client company GmbH]<br>[Attn: Name]<br>[Street, No.]<br>[ZIP City]<br>[USt-IdNr / VAT ID]</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th class="desc">Description</th><th>Service date</th><th class="num">Qty</th><th class="num">Unit price (€)</th><th class="num">Net (€)</th><th></th></tr>
+      </thead>
+      <tbody id="items"></tbody>
+    </table>
+
+    <div class="totals">
+      <div class="line"><span>Net total (Nettobetrag)</span><span>€<span id="net">0,00</span></span></div>
+      <div class="line" id="vatLine"><span>VAT (USt) <span id="vatPct">19</span>%</span><span>€<span id="vat">0,00</span></span></div>
+      <div class="line grand"><span>Total (Gesamtbetrag)</span><span>€<span id="gross">0,00</span></span></div>
+      <p class="vat-note" id="kleinNote" hidden>Gemäß §19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmer).</p>
+    </div>
+
+    <div class="terms">
+      <h3>Payment terms</h3>
+      <div class="ed" contenteditable data-k="terms">Payable within 14 days of the invoice date, without deduction, to the account below. Please reference the invoice number with your payment. Thank you for your business.</div>
+    </div>
+
+    <div class="foot">
+      <div><b>Contact</b><div class="ed" contenteditable data-k="f1">[Founder name]<br>hello@lean-ai.com<br>lean-ai.com</div></div>
+      <div><b>Bank</b><div class="ed" contenteditable data-k="f2">[Bank name]<br>IBAN: [DE00 0000 0000 0000 0000 00]<br>BIC: [XXXXXXXX]</div></div>
+      <div><b>Tax</b><div class="ed" contenteditable data-k="f3">USt-IdNr: [DE000000000]<br>Steuernummer: [00/000/00000]</div></div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY="lean-ai_invoice_v1";
+  var itemsEl=document.getElementById("items");
+  var def=[
+    {desc:"Automation Sprint — [process name]\n50% deposit on commencement",date:"May 2026",qty:1,price:6000},
+  ];
+
+  function fmt(n){return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2});}
+
+  function rowHtml(it){
+    return '<tr>'+
+      '<td class="desc"><div class="ed" contenteditable data-f="desc">'+(it.desc||"").replace(/\n/g,"<br>")+'</div></td>'+
+      '<td><div class="ed" contenteditable data-f="date">'+(it.date||"")+'</div></td>'+
+      '<td class="num"><input type="number" class="qty" data-f="qty" value="'+(it.qty||1)+'" min="0" step="1"></td>'+
+      '<td class="num"><input type="number" data-f="price" value="'+(it.price||0)+'" min="0" step="0.01"></td>'+
+      '<td class="num lineNet">0,00</td>'+
+      '<td><button class="row-del" title="Remove">×</button></td>'+
+    '</tr>';
+  }
+
+  function readRow(tr){
+    var desc=tr.querySelector('[data-f=desc]').innerHTML.replace(/<br\s*\/?>/gi,"\n").replace(/<[^>]+>/g,"").trim();
+    var date=tr.querySelector('[data-f=date]').textContent.trim();
+    var qty=parseFloat(tr.querySelector('[data-f=qty]').value)||0;
+    var price=parseFloat(tr.querySelector('[data-f=price]').value)||0;
+    return {desc:desc,date:date,qty:qty,price:price};
+  }
+
+  function recalc(){
+    var net=0;
+    [].forEach.call(itemsEl.children,function(tr){
+      var r=readRow(tr); var ln=r.qty*r.price; net+=ln;
+      tr.querySelector(".lineNet").textContent=fmt(ln);
+    });
+    var klein=document.getElementById("kleinunternehmer").checked;
+    var rate=parseFloat(document.getElementById("vatRate").value)||0;
+    var vat=klein?0:net*rate/100;
+    document.getElementById("net").textContent=fmt(net);
+    document.getElementById("vat").textContent=fmt(vat);
+    document.getElementById("vatPct").textContent=rate;
+    document.getElementById("gross").textContent=fmt(net+vat);
+    document.getElementById("vatLine").hidden=klein;
+    document.getElementById("kleinNote").hidden=!klein;
+    save();
+  }
+
+  function addRow(it){
+    var wrap=document.createElement("tbody");
+    wrap.innerHTML=rowHtml(it||{desc:"[Description]",date:"",qty:1,price:0});
+    var tr=wrap.firstChild;
+    itemsEl.appendChild(tr);
+    tr.querySelector(".row-del").addEventListener("click",function(){tr.remove();recalc();});
+    tr.addEventListener("input",recalc);
+  }
+
+  function save(){
+    var data={
+      items:[].map.call(itemsEl.children,readRow),
+      klein:document.getElementById("kleinunternehmer").checked,
+      rate:document.getElementById("vatRate").value,
+      fields:{}
+    };
+    document.querySelectorAll("[data-k]").forEach(function(el){data.fields[el.dataset.k]=el.innerHTML;});
+    try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){}
+  }
+
+  function load(){
+    var raw; try{raw=localStorage.getItem(KEY);}catch(e){}
+    if(!raw){def.forEach(addRow);recalc();return;}
+    var data=JSON.parse(raw);
+    (data.items&&data.items.length?data.items:def).forEach(addRow);
+    document.getElementById("kleinunternehmer").checked=!!data.klein;
+    if(data.rate!=null)document.getElementById("vatRate").value=data.rate;
+    if(data.fields)document.querySelectorAll("[data-k]").forEach(function(el){if(data.fields[el.dataset.k]!=null)el.innerHTML=data.fields[el.dataset.k];});
+    recalc();
+  }
+
+  document.getElementById("addRow").addEventListener("click",function(){addRow();recalc();});
+  document.getElementById("kleinunternehmer").addEventListener("change",recalc);
+  document.getElementById("vatRate").addEventListener("input",recalc);
+  document.getElementById("print").addEventListener("click",function(){window.print();});
+  document.getElementById("reset").addEventListener("click",function(){
+    if(confirm("Reset this invoice and clear saved data?")){try{localStorage.removeItem(KEY);}catch(e){}location.reload();}
+  });
+  document.querySelectorAll("[data-k]").forEach(function(el){el.addEventListener("input",save);});
+
+  load();
+})();
+</script>
+</body>
+</html>
+

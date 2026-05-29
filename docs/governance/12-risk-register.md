@@ -1,0 +1,26 @@
+# Lean-AI — Risk Register
+
+*The things that could break a premium part-time studio — and how we see them coming.*
+
+> Scoring: Likelihood (L) and Impact (I) each rated **1 (low) – 5 (high)**; **Score = L × I** (max 25). Owner is the **Founder** unless a subcontractor exists. Review quarterly alongside the OKRs. This is operational risk management, **not** legal or tax advice — confirm compliance items with a Steuerberater / lawyer.
+
+| # | Risk | Category | L | I | Score | Owner | Mitigation | Early-warning signal |
+|---|---|---|---|---|---|---|---|---|
+| 1 | **Founder time overrun / burnout** — side business creeps past 15 hrs/wk | Operational / personal | 4 | 5 | 20 | Founder | Hard WIP limit; calendar-blocked deep work; raise price or pause intake if hours creep; async-first | Founder hours >15/wk for 2+ weeks; weekend work; missed personal commitments |
+| 2 | **Key-person dependence** — everything lives in the founder's head | Operational | 4 | 5 | 20 | Founder | SOP/template library as the product; document as you build; Year-2 subcontractor delivers from SOPs; continuity notes | A task only the founder can do; onboarding a sub would take weeks |
+| 3 | **Employer conflict** — moonlighting breaches contract or causes COI | Legal / personal | 3 | 5 | 15 | Founder | **Written employer permission before invoicing client #1**; avoid employer's clients/sectors; strict time separation | Employer policy change; a prospect overlaps with employer's market |
+| 4 | **Client data / trust breach** — leak or misuse of client operational data | Security / trust | 2 | 5 | 10 | Founder | DPA/NDA; least-privilege access; EU-hosted tooling where possible; data-handling SOP; delete on handover | Access requests beyond scope; tool without adequate data terms |
+| 5 | **AI reliability** — agent produces wrong/unsafe output in production | Delivery / AI | 3 | 4 | 12 | Founder | Human-in-the-loop by design; test against real cases; instrument + monitor; Lean-simplify before automating | Output drift; client-reported errors; eval scores slipping |
+| 6 | **Pricing / commoditization** — AI build work gets cheaper, "good enough" tools appear | Market | 3 | 4 | 12 | Founder | Sell outcomes + adoption, not tooling; premium positioning; deepen retainer relationships; reuse keeps margin | Prospects price-comparing; "we'll just use [tool]"; falling win rate |
+| 7 | **Pipeline concentration** — too dependent on one client or one channel | Commercial | 3 | 4 | 12 | Founder | Diversify warm network + content; cap any client's share of revenue; keep fit-call pipeline full | One client >40% of revenue; only one referral source |
+| 8 | **Cashflow / late payment** — client pays late or defaults | Financial | 3 | 3 | 9 | Founder | 100%/50% upfront; net-14; deposit clears before work; dunning ladder; don't deliver final half while overdue | Invoice past due; client slow on the deposit |
+| 9 | **Subcontractor quality** — sub delivers below the premium bar | Delivery / people | 3 | 4 | 12 | Founder | Vet via paid trial task; deliver from SOPs/templates; founder QA gate before client sees work; clear scope | First deliverable needs heavy rework; missed internal deadlines |
+| 10 | **Scheinselbstständigkeit** — subcontractor reclassified as employee | Legal / compliance | 2 | 5 | 10 | Founder | Flat-rate per-deliverable contract; sub has own clients/tools/autonomy; no integration into a "team" structure; confirm setup with a lawyer/Steuerberater | Sub works only for Lean-AI; fixed hours; looks like an employee |
+| 11 | **Legal / compliance gap** — invoicing (§14), VAT posture, GDPR, legal form | Legal / compliance | 2 | 4 | 8 | Founder | Steuerberater on retainer; §14-compliant invoicing; documented VAT posture; review legal form at Year-3 fork | Steuerberater flags an issue; rule change (e.g. Kleinunternehmer thresholds) |
+| 12 | **Quality/adoption failure** — client team doesn't own the system after handover | Delivery / reputation | 3 | 4 | 12 | Founder | Servant-leadership handover; training + docs; 30-day post-launch support; measure adoption | Client reverts to old process; "can you just keep running it?" |
+| 13 | **Scope creep** — fixed-price engagement expands without re-pricing | Commercial / operational | 3 | 3 | 9 | Founder | Explicit out-of-scope in Angebot; change = new Angebot; fixed scope/price discipline | Recurring "small" extra requests; hours-per-engagement rising |
+| 14 | **Tooling dependency** — AI vendor price hike, outage, or deprecation | Operational / supplier | 3 | 3 | 9 | Founder | Avoid lock-in where feasible; abstract integrations; track tooling cost vs. model; have fallbacks | Vendor pricing/API change; repeated outages |
+| 15 | **Reputation / single bad engagement** — one visible failure in a small DACH market | Reputation | 2 | 4 | 8 | Founder | Decline bad-fit work; under-promise/over-deliver; measured outcomes; honesty early; only take referenceable wins | Lukewarm client feedback; reluctance to give a reference |
+
+**Top risks to manage actively:** #1 founder time/burnout, #2 key-person dependence, #3 employer conflict — all rooted in the part-time, solo constraint. Their mitigations (WIP limit, SOP library, written employer permission) are the same disciplines that make the business premium in the first place.
+

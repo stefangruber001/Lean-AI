@@ -1,0 +1,153 @@
+{
+  "name": "Lean-AI — Lead Intake & Qualification",
+  "meta": {
+    "description": "Receives a website/contact-form submission, enriches & qualifies the lead against the Lean-AI ICP with an AI step, records it, and sends a scheduling link for a 30-minute fit call. Configure credentials (HTTP/AI, email, CRM/Sheet) before activating. Human-in-the-loop: the fit call itself.",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lean-ai-lead",
+        "options": {}
+      },
+      "id": "node-webhook",
+      "name": "Form Submission (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "name", "value": "={{ $json.body.name }}", "type": "string" },
+            { "id": "a2", "name": "email", "value": "={{ $json.body.email }}", "type": "string" },
+            { "id": "a3", "name": "company", "value": "={{ $json.body.company }}", "type": "string" },
+            { "id": "a4", "name": "message", "value": "={{ $json.body.message }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-normalize",
+      "name": "Normalize Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-6\",\n  \"max_tokens\": 600,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"You are Lean-AI's lead qualifier. ICP: SMEs 10-250 employees in DACH/EU with a painful, repetitive, high-volume process and a leader who wants outcomes. Score this lead 1-5 for fit and extract the likely process pain. Return STRICT JSON {\\\"score\\\":n,\\\"reason\\\":\\\"\\\",\\\"process_pain\\\":\\\"\\\",\\\"recommended_next\\\":\\\"diagnostic|nurture|decline\\\"}.\\n\\nLead:\\nName: {{ $json.name }}\\nCompany: {{ $json.company }}\\nEmail: {{ $json.email }}\\nMessage: {{ $json.message }}\"\n  }]\n}",
+        "options": {}
+      },
+      "id": "node-qualify",
+      "name": "AI: Qualify vs ICP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 320]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "p1", "name": "qualification", "value": "={{ JSON.parse($json.content[0].text) }}", "type": "object" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-parse",
+      "name": "Parse Qualification",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.qualification.score }}",
+              "rightValue": 3,
+              "operator": { "type": "number", "operation": "gte" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if",
+      "name": "Qualified?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1120, 320]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "={{ $('Normalize Fields').item.json.email }}",
+        "subject": "Let's find what's possible — book your Lean-AI fit call",
+        "emailFormat": "text",
+        "text": "Hi {{ $('Normalize Fields').item.json.name }},\n\nThank you for reaching out to Lean-AI. Based on what you shared, it sounds like there may be a process worth fixing.\n\nLet's spend 30 minutes on it — no pressure. Book a time that suits you here: [SCHEDULING LINK]\n\nBeforehand, it helps to think about: which single process costs your team the most time each week?\n\nSpeak soon,\nLean-AI — the operating partner for the AI era\nhello@lean-ai.com",
+        "options": {}
+      },
+      "id": "node-invite",
+      "name": "Send Fit-Call Invite",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 220]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "={{ $('Normalize Fields').item.json.email }}",
+        "subject": "Thank you from Lean-AI",
+        "emailFormat": "text",
+        "text": "Hi {{ $('Normalize Fields').item.json.name }},\n\nThank you for getting in touch. From what you've shared, we may not be the right fit right now — but here are a couple of resources that might help: [LINKS].\n\nIf things change, we'd be glad to talk.\n\nLean-AI\nhello@lean-ai.com",
+        "options": {}
+      },
+      "id": "node-nurture",
+      "name": "Send Nurture Reply",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1360, 420]
+    },
+    {
+      "parameters": {
+        "content": "## Setup\n1. Set the Webhook URL as your contact form's POST endpoint (fields: name, email, company, message).\n2. Add Anthropic (or other LLM) HTTP header auth credential.\n3. Add SMTP credential for hello@lean-ai.com.\n4. Replace [SCHEDULING LINK] and [LINKS].\n5. Optionally append a 'Create CRM Record' node after Parse Qualification.\n\nHuman-in-the-loop: the fit call. The AI only triages.",
+        "height": 260,
+        "width": 360
+      },
+      "id": "node-note",
+      "name": "Setup Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 540]
+    }
+  ],
+  "connections": {
+    "Form Submission (Webhook)": { "main": [[{ "node": "Normalize Fields", "type": "main", "index": 0 }]] },
+    "Normalize Fields": { "main": [[{ "node": "AI: Qualify vs ICP", "type": "main", "index": 0 }]] },
+    "AI: Qualify vs ICP": { "main": [[{ "node": "Parse Qualification", "type": "main", "index": 0 }]] },
+    "Parse Qualification": { "main": [[{ "node": "Qualified?", "type": "main", "index": 0 }]] },
+    "Qualified?": { "main": [[{ "node": "Send Fit-Call Invite", "type": "main", "index": 0 }], [{ "node": "Send Nurture Reply", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "lean-ai" }]
+}
+

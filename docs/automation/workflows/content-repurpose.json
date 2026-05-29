@@ -1,0 +1,87 @@
+{
+  "name": "Lean-AI — Content Engine (insight to draft)",
+  "meta": {
+    "description": "Turns a single engagement learning/insight into a drafted LinkedIn post + short article, then emails the draft to the founder for review. Human-in-the-loop: the founder always edits for voice and truth before publishing. Trigger via the n8n form or webhook. Configure AI + email credentials.",
+    "templateCredsSetupCompleted": false
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lean-AI Content Engine",
+        "formDescription": "Drop one insight from this week's work. The agent drafts a post; you edit and publish.",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Insight / learning", "fieldType": "textarea", "requiredField": true },
+            { "fieldLabel": "Metric or before/after (optional)", "fieldType": "text" },
+            { "fieldLabel": "Angle", "fieldType": "dropdown", "fieldOptions": { "values": [ { "option": "Mittelstand AI gap" }, { "option": "Lean before automation" }, { "option": "Servant leadership / adoption" }, { "option": "AI data safety" }, { "option": "Be our own case study" } ] } }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-form",
+      "name": "Insight Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [240, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-sonnet-4-6\",\n  \"max_tokens\": 1200,\n  \"messages\": [{\n    \"role\": \"user\",\n    \"content\": \"You write for Lean-AI, a premium AI-native operations studio for SMEs. Voice: confident, plain, concrete, honest, premium, human. Never use the words consultant, cheap, or Zaps. Turn the insight below into (1) a LinkedIn post (120-200 words, strong first-line hook, one clear takeaway, no hashtags soup) and (2) a 4-6 sentence article teaser. Angle: {{ $json['Angle'] }}. Output as markdown with '## LinkedIn' and '## Article teaser' headings. Do NOT invent client names or fabricate metrics; only use what is provided.\\n\\nInsight: {{ $json['Insight / learning'] }}\\nMetric: {{ $json['Metric or before/after (optional)'] }}\"\n  }]\n}",
+        "options": {}
+      },
+      "id": "node-draft",
+      "name": "AI: Draft Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 320]
+    },
+    {
+      "parameters": {
+        "fromEmail": "hello@lean-ai.com",
+        "toEmail": "hello@lean-ai.com",
+        "subject": "Content draft for review — {{ $('Insight Form').item.json['Angle'] }}",
+        "emailFormat": "text",
+        "text": "Draft ready. Edit for voice + truth before publishing:\n\n{{ $json.content[0].text }}\n\n---\nReminder: verify every claim. Be your own best case study. Publish one artifact this week.",
+        "options": {}
+      },
+      "id": "node-send",
+      "name": "Email Draft to Founder",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [800, 320]
+    },
+    {
+      "parameters": {
+        "content": "## Human-in-the-loop\nThe agent NEVER publishes. It drafts and emails you. You edit for voice and truth, then post manually (or add a LinkedIn API node once you trust it).\n\nGuardrail baked into the prompt: no invented client names, no fabricated metrics.",
+        "height": 220,
+        "width": 360
+      },
+      "id": "node-note",
+      "name": "Setup Notes",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [240, 520]
+    }
+  ],
+  "connections": {
+    "Insight Form": { "main": [[{ "node": "AI: Draft Content", "type": "main", "index": 0 }]] },
+    "AI: Draft Content": { "main": [[{ "node": "Email Draft to Founder", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "lean-ai" }]
+}
+
