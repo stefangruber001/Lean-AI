@@ -1,63 +1,97 @@
 # Lean-AI
 
-**The operating partner for the AI era** — a premium, AI-native operations studio for ambitious small and mid-sized companies.
+> **Operational excellence, engineered with AI.**
 
-This repository contains the **complete company-in-a-box** for Lean-AI: a premium website, a working invoice generator, importable automation workflows, and ~45 founding documents covering strategy, governance, legal, sales, delivery, finance, automation, and people.
+Production marketing site for **Lean-AI** — an independent advisory practice for
+regulated, asset-heavy manufacturing. Lean first, AI where it pays back.
 
-**Start here:** [`docs/INDEX.md`](docs/INDEX.md) — the company handbook with reading paths for every situation.
+Built as a single-page, mobile-first site with **Vite + React + TypeScript +
+Tailwind CSS + Framer Motion + lucide-react**. No backend.
 
 ---
 
-## What's here
+## Run locally
 
-### Website (premium homepage)
-A fast, dependency-free, fully responsive single-page site.
-
-| File | Purpose |
-|---|---|
-| `index.html` | The homepage (semantic, accessible markup). |
-| `styles.css` | Design system: ink + bone + restrained gold; Fraunces + Inter. |
-| `script.js` | Scroll-reveal, sticky nav, mobile menu, contact form, footer year. |
-| `assets/favicon.svg` | Brand mark. |
-| `invoice.html` | **Working invoice generator** — branded, §14 UStG fields, VAT/Kleinunternehmer toggle, saves locally, prints to PDF. |
-
-**Preview locally:**
 ```bash
-python3 -m http.server 8000
-# open http://localhost:8000  (and /invoice.html for the invoice tool)
+npm install      # install dependencies
+npm run dev      # start the dev server (http://localhost:5173)
+npm run build    # type-check + production build → dist/
+npm run preview  # preview the production build
+npm run typecheck
 ```
 
-**Deploy:** any static host works — GitHub Pages, Netlify, Vercel, Cloudflare Pages. No build step.
-
-### Company handbook (`/docs`)
-~45 documents, organised into eight sections. The full map with reading paths is in [`docs/INDEX.md`](docs/INDEX.md):
-
-1. **Strategy & foundation** (`00`–`06`) — executive summary, business plan, market research, financial model, go-to-market, operating model, brand.
-2. **Governance** (`governance/`) — charter, OKRs & roadmap, risk register.
-3. **Legal & compliance** (`legal/`) — MSA, SOW templates, AGB, privacy policy, Impressum, AVV/DPA, NDA, subcontractor agreement, AI & data-handling policy. *Templates — review with a Rechtsanwalt.*
-4. **Sales & marketing** (`sales/`) — playbook, fit-call script, proposals, pricing, outreach, content calendar, case study, one-pager & deck.
-5. **Delivery** (`delivery/`) — SOPs per offer, onboarding, value-stream mapping, AI-readiness, solution design, QA/handover, offboarding.
-6. **Finance** (`finance/`) — invoicing process, cashflow & bookkeeping, quote template.
-7. **Automation** (`automation/`) — internal blueprint, process-flow diagrams, AI agent prompt library, tooling guide, and importable n8n workflows in `automation/workflows/`.
-8. **People** (`people/`) — hiring plan & first-subcontractor role.
+Requires Node 20+ (CI uses Node 22).
 
 ---
 
-## Before you go live — personalise these placeholders
+## Where to edit things
 
-The site is built to be premium and ready; a few items need your real details:
+| You want to change…             | Edit this file |
+| ------------------------------- | -------------- |
+| **All copy & config**           | `src/content.ts` — every headline, paragraph, nav label, and the `CONFIG` block live here. |
+| Brand name, email, CTA text     | `CONFIG` at the top of `src/content.ts`. |
+| **Booking link**                | `CONFIG.BOOKING_URL` in `src/content.ts` — currently `#contact`. Replace with a Calendly/Cal.com URL. |
+| Colors, fonts, spacing tokens   | `tailwind.config.js`. |
+| A specific section's layout     | `src/components/<Section>.tsx`. |
+| Reusable primitives             | `src/components/ui/` (`Button`, `Container`, `Card`, `Pill`, `SectionHeading`, `Section`). |
 
-- [x] **Founder section** (`index.html`, `#founder`): name + bio integrated (Stefan Gruber, from CV). **One step left:** save the headshot as `assets/founder.jpg` — the page already references it and shows it automatically once the file exists.
-- [ ] **Contact email**: `hello@lean-ai.com` is used throughout — set up the inbox or change it.
-- [ ] **Contact form**: currently client-side only (graceful acknowledgement). Wire it to a real endpoint (Formspree / Netlify Forms / your own API) — see the `TODO` in `script.js`.
-- [ ] **Pricing**: figures (€4,500 / €12,000 / €3,500/mo) are market-validated but yours to confirm.
-- [ ] **Legal/footer**: publish the Impressum (`docs/legal/24-impressum.md`) & privacy policy (`docs/legal/23-privacy-policy.md`) as live pages — legally required in Germany — and confirm contents with a Rechtsanwalt/Steuerberater. Fill every `[BRACKETED PLACEHOLDER]` in the legal templates.
-- [ ] **Domain**: point `lean-ai.com` (or your chosen domain) at the host.
-- [ ] **Automation**: import the `docs/automation/workflows/*.json` files into n8n and add your credentials (see `docs/automation/63-tooling-setup-guide.md`).
+Sections render in this order (see `src/App.tsx`): Header → Hero → TrustStrip →
+Problem → Approach → Services (Engagements) → Results → About → CTABand →
+Contact → Footer.
 
 ---
 
-## Status
+## TODO before going fully live
 
-Website: complete and verified (all assets serve 200, markup balanced). Invoice generator + automation workflows: complete, JSON validated. Handbook: ~45 documents, v1.0, cross-checked for pricing/voice consistency and resolving internal links. Research is sourced; market-size figures are order-of-magnitude and all German legal/tax content is **general information, not legal or tax advice** — validate locally with a Rechtsanwalt/Steuerberater before launch.
+These are intentional placeholders, marked with `// TODO` / `{/* TODO */}` in code:
 
+- [ ] **Case study** (`src/components/Results.tsx`) — replace the *illustrative*
+      block + metric tiles (`XX%`) with the first real, attributable client
+      result after the pilot. **Do not publish fabricated names or numbers.**
+- [ ] **Founder photo** (`src/components/About.tsx`) — drop a monochrome headshot
+      at `public/founder.jpg` and swap the styled placeholder for an `<img>`.
+- [ ] **Contact form backend** (`src/components/Contact.tsx`) — the submit
+      handler currently `console.log`s and shows a success state. Wire it to
+      Formspree / Resend / email (see the `// TODO` in `handleSubmit`).
+- [ ] **Booking link** — set `CONFIG.BOOKING_URL` to the real scheduler.
+- [ ] **Real domain & email** — confirm `CONFIG.CONTACT_EMAIL`.
+
+---
+
+## Revenue model
+
+No subscription tiers. The practice sells **three fixed-scope, fixed-fee
+engagements** (see `ENGAGEMENTS` in `src/content.ts`):
+
+1. **Process Value & Automation Audit** — 2–3 week diagnostic + costed roadmap.
+2. **Transformation Sprint** — redesign one process end-to-end and prove it.
+3. **Continuous Improvement Partnership** — ongoing engagement that compounds gains.
+
+Prices are deliberately not shown; the page signals *"Fixed scope · Fixed fee."*
+
+---
+
+## Design system (summary)
+
+- **Accent:** deep teal-blue `#0F4C5C` (single accent, used sparingly).
+- **Ink** `#0E1116` / **Paper** `#FAFAF7` (warm off-white).
+- **Type:** Fraunces (display serif) + Inter (body) + IBM Plex Mono (labels/numbers).
+- **Motion:** subtle fade-up + stagger on scroll; respects `prefers-reduced-motion`
+  via Framer's `MotionConfig reducedMotion="user"`.
+- **Accessibility:** semantic landmarks, keyboard focus rings, labelled form
+  fields with inline errors, AA-minded contrast.
+
+---
+
+## Deployment
+
+Pushing to `main` (or the active feature branch) triggers
+`.github/workflows/deploy-pages.yml`, which builds the Vite app and publishes
+`dist/` to GitHub Pages at **https://stefangruber001.github.io/Lean-AI/**.
+
+The Vite `base` is set to `/Lean-AI/` (`vite.config.ts`) so asset paths resolve
+under the project-pages subpath. If the site moves to a root domain, set
+`base: "/"`.
+
+The previous static one-page site is preserved under [`legacy/`](./legacy) and
+the company handbook lives in [`docs/`](./docs).
