@@ -23,8 +23,8 @@ export default {
         hairline: "#E5E5E0", // 1px low-contrast borders
       },
       fontFamily: {
-        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
-        sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Fraunces Variable"', "ui-serif", "Georgia", "serif"],
+        sans: ['"Inter Variable"', "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ['"IBM Plex Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
       },
       letterSpacing: {

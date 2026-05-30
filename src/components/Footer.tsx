@@ -1,3 +1,4 @@
+import { Linkedin } from "lucide-react";
 import { CONFIG, NAV, FOOTER } from "../content";
 import { Container } from "./ui/Container";
 
@@ -29,12 +30,21 @@ export function Footer() {
             ))}
           </nav>
 
-          <div className="text-sm">
+          <div className="flex flex-col gap-3 text-sm">
             <a
               href={`mailto:${CONFIG.CONTACT_EMAIL}`}
               className="text-ink transition-colors hover:text-accent"
             >
               {CONFIG.CONTACT_EMAIL}
+            </a>
+            <a
+              href={CONFIG.LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-gray-1 transition-colors hover:text-accent"
+            >
+              <Linkedin size={15} />
+              LinkedIn
             </a>
           </div>
         </div>

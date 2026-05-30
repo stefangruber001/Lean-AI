@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { MotionConfig } from "framer-motion";
 import { Header } from "./components/Header";
+import { ScrollProgress } from "./components/ScrollProgress";
 import { Hero } from "./components/Hero";
 import { TrustStrip } from "./components/TrustStrip";
 
@@ -18,6 +19,7 @@ export default function App() {
   return (
     // reducedMotion="user" makes Framer respect prefers-reduced-motion automatically.
     <MotionConfig reducedMotion="user">
+      <ScrollProgress />
       <Header />
       <main>
         <Hero />

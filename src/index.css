@@ -17,6 +17,13 @@
 
   body {
     @apply bg-paper text-ink font-sans antialiased;
+    font-optical-sizing: auto;
+  }
+
+  /* Premium display headings: optical sizing + slightly tighter tracking. */
+  .font-display {
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144;
   }
 
   ::selection {

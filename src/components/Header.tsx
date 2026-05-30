@@ -4,10 +4,14 @@ import { Menu, X } from "lucide-react";
 import { CONFIG, NAV } from "../content";
 import { Container } from "./ui/Container";
 import { Button } from "./ui/Button";
+import { useActiveSection } from "../lib/useActiveSection";
+
+const SECTION_IDS = NAV.map((n) => n.href.replace("#", ""));
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const active = useActiveSection(SECTION_IDS);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -43,15 +47,27 @@ export function Header() {
 
         {/* desktop nav */}
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {NAV.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm text-gray-1 transition-colors hover:text-accent"
-            >
-              {item.label}
-            </a>
-          ))}
+          {NAV.map((item) => {
+            const isActive = active === item.href.replace("#", "");
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "true" : undefined}
+                className={`relative text-sm transition-colors hover:text-accent ${
+                  isActive ? "text-ink" : "text-gray-1"
+                }`}
+              >
+                {item.label}
+                <span
+                  className={`absolute -bottom-1.5 left-0 h-px bg-accent transition-all duration-300 ease-gentle ${
+                    isActive ? "w-full" : "w-0"
+                  }`}
+                  aria-hidden="true"
+                />
+              </a>
+            );
+          })}
         </nav>
 
         <div className="hidden lg:block">

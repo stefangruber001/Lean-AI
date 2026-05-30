@@ -9,6 +9,8 @@ export const CONFIG = {
   FOUNDER_NAME: "Stefan Gruber",
   FOUNDER_TITLE: "Founder & Principal Advisor",
   CONTACT_EMAIL: "hello@lean-ai.com", // TODO: confirm real address
+  LINKEDIN_URL: "https://www.linkedin.com/in/stefan-gruber001/",
+  LOCATION: "Barcelona · Working with clients across Europe",
   BOOKING_URL: "#contact", // TODO: replace with Calendly/Cal.com link
   PRIMARY_CTA: "Book a discovery call",
   LOCALE: "en",
@@ -27,7 +29,6 @@ export const NAV: NavItem[] = [
 export const HERO = {
   eyebrow: "Independent advisory for regulated manufacturing",
   title: "Cut the cost and time out of your most critical processes — without breaking compliance.",
-  // The accented fragment is rendered in the display-serif italic accent.
   titleAccent: "without breaking compliance.",
   subhead:
     "I help manufacturing and operations leaders redesign high-stakes processes with Lean and deploy AI where it actually pays back — measured in time saved, errors removed, and capacity unlocked.",
@@ -35,13 +36,13 @@ export const HERO = {
   secondaryCta: "See how it works",
   secondaryHref: "#approach",
   trustLine:
-    "20+ years leading engineering & operational excellence across global, regulated manufacturing sites.",
+    "20+ years leading engineering & operational excellence across global, regulated manufacturing — including global organizations of 850+ engineers and CAPEX portfolios above 400 MUSD.",
 } as const;
 
 export const TRUST_SIGNALS: string[] = [
   "Lean Six Sigma Black Belt",
-  "20+ years in regulated manufacturing",
-  "Global engineering leadership",
+  "20+ years in regulated pharma manufacturing",
+  "Led global engineering orgs of 850+",
   "Executive MBA — IESE",
 ];
 
@@ -53,22 +54,18 @@ export const PROBLEM = {
     "Most automation efforts start with the tool and ignore the process — so they automate waste, stall in pilots, and never prove ROI. The technology was never really the constraint.",
     "In regulated, asset-heavy environments the stakes are higher: change has to survive audits, win over the people doing the work, and hold up under real conditions — not just in a demo.",
   ],
-  // Industry-context framings only — no proprietary/invented client numbers.
   insights: [
     {
       stat: "Most",
-      label:
-        "AI pilots never scale to production. Value, not technology, is the bottleneck.",
+      label: "AI pilots never scale to production. Value, not technology, is the bottleneck.",
     },
     {
       stat: "Process first",
-      label:
-        "Automating a broken process just makes the waste run faster — and harder to see.",
+      label: "Automating a broken process just makes the waste run faster — and harder to see.",
     },
     {
       stat: "Adoption",
-      label:
-        "Change that the floor doesn't own quietly reverts the moment the consultants leave.",
+      label: "Change the floor doesn't own quietly reverts the moment the consultants leave.",
     },
   ],
 } as const;
@@ -111,7 +108,8 @@ export const ENGAGEMENTS = {
   number: "03",
   kicker: "Engagements",
   heading: "Three ways to work together.",
-  intro: "Fixed scope. Fixed fee. No open-ended retainers to start — every engagement stands on its own outcome.",
+  intro:
+    "Fixed scope. Fixed fee. No open-ended retainers to start — every engagement stands on its own outcome.",
   feeSignal: "Fixed scope · Fixed fee",
   offers: [
     {
@@ -161,8 +159,7 @@ export const RESULTS = {
   kicker: "Results",
   heading: "Evidence over promises.",
   intro:
-    "A flagship case study is in progress with a first pilot client. Until it's published, here is the exact format every engagement is measured against.",
-  // Clearly illustrative, non-attributed. Real numbers replace these post-pilot.
+    "A flagship Lean-AI client case study is in progress with a first pilot. Until it's published, here is the exact format every engagement is measured against — and, below, two decades of operating results behind the method.",
   caseLabel: "Illustrative engagement — manufacturing operations",
   challenge:
     "A high-volume, audit-critical process owned by a stretched team, with manual handoffs that capped throughput and introduced error risk.",
@@ -181,15 +178,28 @@ export const ABOUT = {
   number: "05",
   kicker: "About",
   heading: "Two decades on the factory floor and in the boardroom.",
-  body: "I've spent over 20 years leading engineering and operational excellence in regulated, asset-heavy manufacturing — from the plant floor to global responsibility for large capital portfolios and engineering organizations across multiple sites. I'm a Lean Six Sigma Black Belt with an Executive MBA from IESE. I've delivered measurable gains in throughput, reliability, and cost — and I've seen exactly where technology delivers and where it stalls. Lean-AI is how I bring that operator's judgment to teams who want AI to actually pay off.",
-  pullQuote:
-    "We don't sell advice. We build the system, prove it works, and hand you the keys.",
+  body: [
+    "I've spent over 20 years leading engineering and operational excellence in regulated, asset-heavy pharmaceutical manufacturing — from the plant floor and apprenticeship to global responsibility for engineering organizations of 850+ professionals and capital portfolios above 400 MUSD across more than a dozen sites.",
+    "I'm a Lean Six Sigma Black Belt with an Executive MBA from IESE in Barcelona. I've delivered measurable gains in throughput, reliability, and cost — and I've seen exactly where technology delivers and where it stalls. Lean-AI is how I bring that operator's judgment to teams who want AI to actually pay off.",
+  ],
+  pullQuote: "I don't sell advice. I build the system, prove it works, and hand you the keys.",
+  // Founder's own 20-year operating record — NOT Lean-AI client results.
+  trackRecord: [
+    { value: "20+", label: "years in regulated manufacturing" },
+    { value: "850+", label: "engineers led globally" },
+    { value: "400M+", label: "USD CAPEX portfolios governed" },
+    { value: "+32%", label: "OTIF improvement delivered" },
+  ],
+  trackRecordNote: "Founder's career track record in senior engineering & operations leadership — not Lean-AI client metrics.",
   credentials: [
     "Lean Six Sigma Black Belt",
-    "Industrial Engineering",
-    "Executive MBA — IESE",
-    "Global multi-site leadership",
+    "Executive MBA — IESE, Barcelona",
+    "MSc Industrial Engineering (distinction)",
+    "BSc Electrical & Mechanical Engineering",
+    "Global multi-site engineering leadership",
+    "Greenfield · brownfield · CMO investment",
   ],
+  photo: "founder.jpg", // place at /public/founder.jpg
 } as const;
 
 export const CTA_BAND = {
@@ -203,7 +213,8 @@ export const CONTACT = {
   kicker: "Contact",
   heading: "Let's find the process that's costing you the most.",
   copy: "Tell me where your operation leaks time and money. I'll tell you honestly whether Lean and AI can move it — and what I'd look at first.",
-  responseLine: "Direct line to the founder. I reply to every serious enquiry within two business days.",
+  responseLine:
+    "Direct line to the founder. I reply to every serious enquiry within two business days.",
   email: CONFIG.CONTACT_EMAIL,
   fields: {
     name: "Name",
