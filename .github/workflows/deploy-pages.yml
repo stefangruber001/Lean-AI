@@ -1,8 +1,12 @@
 name: Deploy site to GitHub Pages
 
+# Deploy only from main. The github-pages environment only authorizes
+# deployments from the default branch, so triggering on other branches
+# produced an instant "deploy" rejection. Build still runs on the feature
+# branch (CI signal) but the deploy job is gated to main.
 on:
   push:
-    branches: ["claude/lean-ai-repo-transfer-6LCY1", "main"]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -43,6 +47,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
