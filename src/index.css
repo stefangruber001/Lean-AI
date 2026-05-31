@@ -27,13 +27,13 @@
   }
 
   ::selection {
-    background-color: #0f4c5c;
+    background-color: #B4541E;
     color: #fafaf7;
   }
 
   /* Visible, on-brand focus ring for keyboard users */
   :focus-visible {
-    outline: 2px solid #0f4c5c;
+    outline: 2px solid #B4541E;
     outline-offset: 3px;
     border-radius: 2px;
   }

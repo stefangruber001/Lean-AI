@@ -12,7 +12,7 @@ export function CTABand() {
       <svg className="absolute inset-0 h-full w-full opacity-[0.07]" aria-hidden="true">
         <defs>
           <pattern id="ctagrid" width="44" height="44" patternUnits="userSpaceOnUse">
-            <path d="M44 0H0V44" stroke="#FAFAF7" strokeWidth="1" />
+            <path d="M44 0H0V44" stroke="#F4EFE7" strokeWidth="1" />
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#ctagrid)" />

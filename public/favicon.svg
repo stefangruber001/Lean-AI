@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="14" fill="#0F4C5C" />
-  <!-- ascending precision line + nodes: operational improvement -->
+  <rect width="64" height="64" rx="14" fill="#211A14" />
+  <!-- ascending precision line + node: operational improvement, in burnt sienna -->
   <polyline points="14,44 27,33 38,40 50,20"
-    fill="none" stroke="#FAFAF7" stroke-width="4"
+    fill="none" stroke="#E0843F" stroke-width="4"
     stroke-linecap="round" stroke-linejoin="round" />
-  <circle cx="50" cy="20" r="4.5" fill="#FAFAF7" />
+  <circle cx="50" cy="20" r="4.5" fill="#E0843F" />
 </svg>

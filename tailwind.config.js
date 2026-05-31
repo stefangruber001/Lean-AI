@@ -4,23 +4,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Core
-        ink: "#0E1116", // near-black: primary text + dark band
-        paper: "#FAFAF7", // warm off-white page background
-        // Single accent — deep teal-blue, used sparingly
+        // Warm editorial palette (2026 award-winning direction: tinted neutrals
+        // + moody dark with warm highlights — deliberately not pure white).
+        ink: "#211A14", // warm espresso near-black: primary text + dark band
+        "ink-2": "#2E261E", // slightly lifted espresso for layered dark panels
+        paper: "#F4EFE7", // warm bone / cream page background (not white)
+        "paper-2": "#EDE6DA", // a touch deeper for alternating sections
+        // Single accent — burnt sienna / terracotta, used sparingly
         accent: {
-          DEFAULT: "#0F4C5C",
-          600: "#0D4250",
-          700: "#0A3540",
-          50: "#EAF1F3",
+          DEFAULT: "#B4541E", // burnt sienna
+          600: "#9E4818",
+          700: "#823A13",
+          50: "#F2E3D6", // soft clay tint for fills on light
         },
-        // 3-step muted gray scale for secondary text
+        // 3-step warm taupe scale for secondary text
         gray: {
-          1: "#3A3F46", // strong secondary
-          2: "#6B7178", // muted
-          3: "#9AA0A6", // faint
+          1: "#4A4036", // strong secondary (warm)
+          2: "#766B5D", // muted taupe
+          3: "#A39684", // faint stone
         },
-        hairline: "#E5E5E0", // 1px low-contrast borders
+        hairline: "#DDD3C4", // 1px low-contrast warm border
       },
       fontFamily: {
         display: ['"Fraunces Variable"', "ui-serif", "Georgia", "serif"],
@@ -39,9 +42,9 @@ export default {
         display: ["clamp(2rem, 4vw, 3.25rem)", { lineHeight: "1.05", letterSpacing: "-0.015em" }],
       },
       boxShadow: {
-        header: "0 1px 0 0 #E5E5E0, 0 8px 24px -16px rgba(14,17,22,0.18)",
-        card: "0 1px 2px rgba(14,17,22,0.04), 0 12px 32px -20px rgba(14,17,22,0.18)",
-        cardHover: "0 2px 4px rgba(14,17,22,0.06), 0 24px 48px -24px rgba(14,17,22,0.28)",
+        header: "0 1px 0 0 #DDD3C4, 0 8px 24px -16px rgba(33,26,20,0.16)",
+        card: "0 1px 2px rgba(33,26,20,0.04), 0 12px 32px -20px rgba(33,26,20,0.16)",
+        cardHover: "0 2px 4px rgba(33,26,20,0.06), 0 24px 48px -24px rgba(33,26,20,0.26)",
       },
       transitionTimingFunction: {
         gentle: "cubic-bezier(0.22, 1, 0.36, 1)",

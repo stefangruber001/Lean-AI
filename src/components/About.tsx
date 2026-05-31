@@ -91,7 +91,7 @@ export function About() {
                   <svg className="absolute inset-0 h-full w-full opacity-[0.12]" aria-hidden="true">
                     <defs>
                       <pattern id="aboutgrid" width="28" height="28" patternUnits="userSpaceOnUse">
-                        <path d="M28 0H0V28" stroke="#FAFAF7" strokeWidth="1" />
+                        <path d="M28 0H0V28" stroke="#F4EFE7" strokeWidth="1" />
                       </pattern>
                     </defs>
                     <rect width="100%" height="100%" fill="url(#aboutgrid)" />

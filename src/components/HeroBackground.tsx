@@ -42,11 +42,11 @@ export function HeroBackground() {
     >
       <defs>
         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-          <path d="M40 0H0V40" stroke="#0E1116" strokeOpacity="0.05" strokeWidth="1" />
+          <path d="M40 0H0V40" stroke="#211A14" strokeOpacity="0.06" strokeWidth="1" />
         </pattern>
         <radialGradient id="glow" cx="60%" cy="35%" r="70%">
-          <stop offset="0%" stopColor="#0F4C5C" stopOpacity="0.10" />
-          <stop offset="100%" stopColor="#0F4C5C" stopOpacity="0" />
+          <stop offset="0%" stopColor="#B4541E" stopOpacity="0.10" />
+          <stop offset="100%" stopColor="#B4541E" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -61,7 +61,7 @@ export function HeroBackground() {
           y1={NODES[a].y}
           x2={NODES[b].x}
           y2={NODES[b].y}
-          stroke="#0F4C5C"
+          stroke="#B4541E"
           strokeOpacity="0.28"
           strokeWidth="1"
           initial={reduce ? false : { pathLength: 0, opacity: 0 }}
@@ -77,7 +77,7 @@ export function HeroBackground() {
           cx={n.x}
           cy={n.y}
           r={n.r}
-          fill="#0F4C5C"
+          fill="#B4541E"
           initial={reduce ? false : { scale: 0, opacity: 0 }}
           animate={
             reduce
@@ -96,7 +96,7 @@ export function HeroBackground() {
           cy={130}
           r={4}
           fill="none"
-          stroke="#0F4C5C"
+          stroke="#B4541E"
           strokeWidth="1"
           initial={{ scale: 1, opacity: 0.5 }}
           animate={{ scale: [1, 3.5], opacity: [0.5, 0] }}
@@ -122,12 +122,12 @@ export function HeroBackgroundDark() {
     >
       <defs>
         <pattern id="dgrid" width="56" height="56" patternUnits="userSpaceOnUse">
-          <path d="M56 0H0V56" stroke="#FAFAF7" strokeOpacity="0.05" strokeWidth="1" />
+          <path d="M56 0H0V56" stroke="#F4EFE7" strokeOpacity="0.05" strokeWidth="1" />
         </pattern>
         <radialGradient id="dglow" cx="78%" cy="22%" r="60%">
-          <stop offset="0%" stopColor="#0F4C5C" stopOpacity="0.55" />
-          <stop offset="55%" stopColor="#0F4C5C" stopOpacity="0.12" />
-          <stop offset="100%" stopColor="#0F4C5C" stopOpacity="0" />
+          <stop offset="0%" stopColor="#B4541E" stopOpacity="0.55" />
+          <stop offset="55%" stopColor="#B4541E" stopOpacity="0.12" />
+          <stop offset="100%" stopColor="#B4541E" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -152,7 +152,7 @@ export function HeroBackgroundDark() {
               <motion.line
                 key={`l${i}`}
                 x1={N[a].x} y1={N[a].y} x2={N[b].x} y2={N[b].y}
-                stroke="#3E8FA3" strokeOpacity="0.4" strokeWidth="1"
+                stroke="#C8723E" strokeOpacity="0.4" strokeWidth="1"
                 initial={reduce ? false : { pathLength: 0, opacity: 0 }}
                 animate={reduce ? undefined : { pathLength: 1, opacity: 0.4 }}
                 transition={{ duration: 1.3, delay: 0.3 + i * 0.07, ease: "easeOut" }}
@@ -162,7 +162,7 @@ export function HeroBackgroundDark() {
               <motion.circle
                 key={`n${i}`}
                 cx={n.x} cy={n.y} r={i % 3 === 0 ? 4 : 2.6}
-                fill="#5BB0C4"
+                fill="#E08A4F"
                 initial={reduce ? false : { scale: 0, opacity: 0 }}
                 animate={reduce ? undefined : { scale: 1, opacity: 0.9 }}
                 transition={{ duration: 0.8, delay: 0.4 + i * 0.08, ease: "easeOut" }}
@@ -171,7 +171,7 @@ export function HeroBackgroundDark() {
             ))}
             {!reduce && (
               <motion.circle
-                cx={1140} cy={90} r={4} fill="none" stroke="#5BB0C4" strokeWidth="1"
+                cx={1140} cy={90} r={4} fill="none" stroke="#E08A4F" strokeWidth="1"
                 initial={{ scale: 1, opacity: 0.6 }}
                 animate={{ scale: [1, 4], opacity: [0.6, 0] }}
                 transition={{ duration: 3.6, repeat: Infinity, ease: "easeOut", delay: 1.6 }}
