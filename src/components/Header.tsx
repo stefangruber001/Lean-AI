@@ -38,7 +38,9 @@ export function Header() {
         <Container className="flex h-16 items-center justify-between lg:h-20">
           <a
             href="#top"
-            className="font-display text-xl font-semibold tracking-tight text-ink"
+            className={`font-display text-xl font-semibold tracking-tight transition-colors ${
+              scrolled ? "text-ink" : "text-paper"
+            }`}
             aria-label={`${CONFIG.BRAND_NAME} — home`}
           >
             {CONFIG.BRAND_NAME}
@@ -54,14 +56,14 @@ export function Header() {
                   href={item.href}
                   aria-current={isActive ? "true" : undefined}
                   className={`relative text-sm transition-colors hover:text-accent ${
-                    isActive ? "text-ink" : "text-gray-1"
+                    scrolled ? (isActive ? "text-ink" : "text-gray-1") : "text-paper/80 hover:text-paper"
                   }`}
                 >
                   {item.label}
                   <span
-                    className={`absolute -bottom-1.5 left-0 h-px bg-accent transition-all duration-300 ease-gentle ${
-                      isActive ? "w-full" : "w-0"
-                    }`}
+                    className={`absolute -bottom-1.5 left-0 h-px transition-all duration-300 ease-gentle ${
+                      scrolled ? "bg-accent" : "bg-accent-50"
+                    } ${isActive ? "w-full" : "w-0"}`}
                     aria-hidden="true"
                   />
                 </a>
@@ -70,14 +72,22 @@ export function Header() {
           </nav>
 
           <div className="hidden lg:block">
-            <Button href={CONFIG.BOOKING_URL} variant="primary" className="!px-6 !py-3 text-sm">
+            <Button
+              href={CONFIG.BOOKING_URL}
+              variant={scrolled ? "primary" : "onDark"}
+              className="!px-6 !py-3 text-sm"
+            >
               {CONFIG.PRIMARY_CTA}
             </Button>
           </div>
 
-          {/* mobile toggle — bordered chip, always clearly visible */}
+          {/* mobile toggle — bordered chip, adapts to the band behind it */}
           <button
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 bg-paper/80 text-ink shadow-sm backdrop-blur-md transition-colors hover:border-ink/30 lg:hidden"
+            className={`inline-flex h-11 w-11 items-center justify-center rounded-full border shadow-sm backdrop-blur-md transition-colors lg:hidden ${
+              scrolled
+                ? "border-ink/15 bg-paper/80 text-ink hover:border-ink/30"
+                : "border-paper/25 bg-ink/30 text-paper hover:border-paper/50"
+            }`}
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             aria-expanded={open}

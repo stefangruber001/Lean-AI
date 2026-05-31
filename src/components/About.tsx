@@ -6,7 +6,9 @@ import { SectionHeading } from "./ui/SectionHeading";
 
 export function About() {
   const [imgOk, setImgOk] = useState(true);
-  const photoSrc = `${import.meta.env.BASE_URL}${ABOUT.photo}`;
+  const [bust, setBust] = useState(0); // retry counter to defeat a stale 404 cache
+  const base = `${import.meta.env.BASE_URL}${ABOUT.photo}`;
+  const photoSrc = bust ? `${base}?v=${bust}` : base;
 
   return (
     <Section id="about">
@@ -55,15 +57,26 @@ export function About() {
 
         <FadeItem className="lg:col-span-5">
           <figure className="lg:sticky lg:top-28">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-hairline bg-gradient-to-br from-ink to-accent-700">
+            <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-hairline bg-gradient-to-br from-ink to-accent-700">
               {imgOk ? (
-                <img
-                  src={photoSrc}
-                  alt={`${CONFIG.FOUNDER_NAME}, ${CONFIG.FOUNDER_TITLE} at ${CONFIG.BRAND_NAME}`}
-                  className="h-full w-full object-cover grayscale-[0.15] contrast-[1.02]"
-                  loading="lazy"
-                  onError={() => setImgOk(false)}
-                />
+                <>
+                  <img
+                    src={photoSrc}
+                    alt={`${CONFIG.FOUNDER_NAME}, ${CONFIG.FOUNDER_TITLE} at ${CONFIG.BRAND_NAME}`}
+                    className="h-full w-full object-cover object-top grayscale transition-all duration-500 ease-gentle group-hover:grayscale-0"
+                    onError={() => {
+                      // First failure may be a stale 404 cache mid-deploy — retry once
+                      // with a cache-buster before falling back to the placeholder.
+                      if (bust < 1) setBust(1);
+                      else setImgOk(false);
+                    }}
+                  />
+                  {/* subtle ink gradient + name plate for an editorial finish */}
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/70 to-transparent"
+                    aria-hidden="true"
+                  />
+                </>
               ) : (
                 <>
                   {/* TODO: upload a professional monochrome headshot to /public/founder.jpg

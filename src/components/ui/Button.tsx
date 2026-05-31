@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "outline" | "ghost";
+type Variant = "primary" | "outline" | "ghost" | "onDark";
 
 const base =
   "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all duration-300 ease-gentle focus-visible:outline-none disabled:opacity-60 disabled:pointer-events-none";
@@ -13,6 +13,7 @@ const variants: Record<Variant, string> = {
   outline:
     "border border-ink/20 text-ink hover:border-ink/40 hover:bg-ink/[0.03]",
   ghost: "text-ink hover:text-accent",
+  onDark: "bg-paper text-ink hover:bg-paper/90",
 };
 
 export function Button({
