@@ -8,7 +8,7 @@ export const CONFIG = {
   TAGLINE: "Operational excellence, engineered with AI.",
   FOUNDER_NAME: "Stefan Gruber",
   FOUNDER_TITLE: "Founder & Principal Advisor",
-  CONTACT_EMAIL: "hello@lean-ai.com", // TODO: confirm real address
+  CONTACT_EMAIL: "office@lean-ai.com",
   LINKEDIN_URL: "https://www.linkedin.com/in/stefan-gruber001/",
   LOCATION: "Barcelona · clients across Europe",
   BOOKING_URL: "#contact", // TODO: replace with Calendly/Cal.com link
@@ -191,4 +191,58 @@ export const CONTACT = {
 export const FOOTER = {
   positioning: "Operational excellence, engineered with AI.",
   builtLine: "Built independently.",
+} as const;
+
+// =============================================================
+//  LEGAL — Impressum / Legal notice + Privacy.
+//  TODO: replace every <…> placeholder with the real legal details before
+//  public launch. Spain (LSSI-CE) + EU/GDPR expectations are reflected below.
+// =============================================================
+export const LEGAL = {
+  // Values that must be confirmed by the founder. Until then they render as
+  // visibly-bracketed placeholders so nothing false is published.
+  legalName: "<Full legal name / sole trader or company name>",
+  address: "<Street, postal code, city>, Spain",
+  vatId: "<NIF / VAT ID, e.g. ESX0000000X>",
+  email: CONFIG.CONTACT_EMAIL,
+  responsiblePerson: CONFIG.FOUNDER_NAME,
+
+  impressum: {
+    title: "Legal notice",
+    subtitle: "Impressum",
+    intro:
+      "Information pursuant to applicable Spanish (LSSI-CE) and EU disclosure requirements for commercial websites.",
+  },
+  privacy: {
+    title: "Privacy",
+    subtitle: "Data protection",
+    intro:
+      "How personal data submitted through this website is handled, in line with the EU General Data Protection Regulation (GDPR).",
+    points: [
+      {
+        h: "Who is responsible",
+        b: "The data controller is the person/entity named in the Legal notice above. Contact: " + CONFIG.CONTACT_EMAIL + ".",
+      },
+      {
+        h: "What we collect",
+        b: "Only what you choose to send via the contact form (name, work email, company, and your message) or by emailing directly. No tracking or advertising cookies are set.",
+      },
+      {
+        h: "Why and on what basis",
+        b: "To respond to your enquiry and assess a possible engagement — on the basis of your consent and our legitimate interest in answering business requests.",
+      },
+      {
+        h: "How long we keep it",
+        b: "Enquiry data is kept only as long as needed to handle your request and any resulting engagement, then deleted.",
+      },
+      {
+        h: "Your rights",
+        b: "You may request access, correction, or deletion of your data, or object to its processing, at any time by emailing " + CONFIG.CONTACT_EMAIL + ".",
+      },
+      {
+        h: "Hosting",
+        b: "This site is served as static files via GitHub Pages (GitHub, Inc.). Standard server logs may be processed by the host for security and delivery.",
+      },
+    ],
+  },
 } as const;

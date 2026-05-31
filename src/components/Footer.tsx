@@ -49,11 +49,19 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-hairline pt-6 text-xs text-gray-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 flex flex-col gap-4 border-t border-hairline pt-6 text-xs text-gray-3 sm:flex-row sm:items-center sm:justify-between">
           <span>
             © {year} {CONFIG.BRAND_NAME}. {CONFIG.TAGLINE}
           </span>
-          <span className="font-mono uppercase tracking-[0.1em]">{FOOTER.builtLine}</span>
+          <div className="flex items-center gap-5">
+            <a href="#legal" className="transition-colors hover:text-accent">
+              Legal notice
+            </a>
+            <a href="#legal-privacy" className="transition-colors hover:text-accent">
+              Privacy
+            </a>
+            <span className="font-mono uppercase tracking-[0.1em]">{FOOTER.builtLine}</span>
+          </div>
         </div>
       </Container>
     </footer>
