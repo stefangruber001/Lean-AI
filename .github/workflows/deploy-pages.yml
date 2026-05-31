@@ -36,11 +36,6 @@ jobs:
       - name: Add .nojekyll
         run: touch dist/.nojekyll
 
-      - name: Configure Pages (enables Pages if needed)
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
