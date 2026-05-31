@@ -38,14 +38,21 @@ export function Services() {
                 </div>
 
                 <h3
-                  className={`mt-5 font-display text-2xl font-medium ${
+                  className={`mt-5 font-display text-3xl font-semibold ${
                     featured ? "text-paper" : "text-ink"
                   }`}
                 >
                   {offer.name}
                 </h3>
                 <p
-                  className={`mt-3 text-[0.97rem] leading-relaxed ${
+                  className={`mt-1 font-mono text-[0.7rem] uppercase tracking-[0.1em] ${
+                    featured ? "text-paper/55" : "text-gray-3"
+                  }`}
+                >
+                  {offer.tagline}
+                </p>
+                <p
+                  className={`mt-4 text-[0.97rem] leading-relaxed ${
                     featured ? "text-paper/80" : "text-gray-1"
                   }`}
                 >
@@ -58,15 +65,9 @@ export function Services() {
                       <Check
                         size={18}
                         strokeWidth={2}
-                        className={`mt-0.5 shrink-0 ${
-                          featured ? "text-accent-50" : "text-accent"
-                        }`}
+                        className={`mt-0.5 shrink-0 ${featured ? "text-accent-50" : "text-accent"}`}
                       />
-                      <span
-                        className={`text-[0.95rem] ${
-                          featured ? "text-paper/85" : "text-gray-1"
-                        }`}
-                      >
+                      <span className={`text-[0.95rem] ${featured ? "text-paper/85" : "text-gray-1"}`}>
                         {b}
                       </span>
                     </li>
@@ -74,19 +75,13 @@ export function Services() {
                 </ul>
 
                 <div className="mt-auto pt-8">
-                  <p
-                    className={`text-sm italic leading-relaxed ${
-                      featured ? "text-paper/65" : "text-gray-2"
-                    }`}
-                  >
+                  <p className={`text-sm italic leading-relaxed ${featured ? "text-paper/65" : "text-gray-2"}`}>
                     {offer.who}
                   </p>
                   <a
                     href={CONFIG.BOOKING_URL}
                     className={`mt-5 inline-flex items-center gap-2 text-sm font-medium transition-colors ${
-                      featured
-                        ? "text-accent-50 hover:text-paper"
-                        : "text-accent hover:text-accent-700"
+                      featured ? "text-accent-50 hover:text-paper" : "text-accent hover:text-accent-700"
                     }`}
                   >
                     {CONFIG.PRIMARY_CTA}

@@ -76,14 +76,14 @@ export function Header() {
           </Button>
         </div>
 
-        {/* mobile toggle */}
+        {/* mobile toggle — bordered chip so it's always clearly visible */}
         <button
-          className="-mr-2 inline-flex items-center justify-center p-2 text-ink lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 bg-paper/80 text-ink shadow-sm backdrop-blur-md transition-colors hover:border-ink/30 lg:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
         >
-          {open ? <X size={24} /> : <Menu size={24} />}
+          {open ? <X size={22} strokeWidth={2} /> : <Menu size={22} strokeWidth={2} />}
         </button>
       </Container>
 
