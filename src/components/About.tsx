@@ -3,6 +3,7 @@ import { Linkedin, MapPin } from "lucide-react";
 import { ABOUT, CONFIG } from "../content";
 import { Section, FadeItem } from "./ui/Section";
 import { SectionHeading } from "./ui/SectionHeading";
+import { CountUp } from "./ui/CountUp";
 
 export function About() {
   const [imgOk, setImgOk] = useState(true);
@@ -35,7 +36,9 @@ export function About() {
             <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-hairline bg-hairline sm:grid-cols-4">
               {ABOUT.trackRecord.map((m) => (
                 <div key={m.label} className="bg-paper p-5">
-                  <dt className="font-display text-3xl font-semibold text-ink">{m.value}</dt>
+                  <dt>
+                    <CountUp value={m.value} className="font-display text-3xl font-semibold text-ink" />
+                  </dt>
                   <dd className="mt-1.5 text-xs leading-snug text-gray-2">{m.label}</dd>
                 </div>
               ))}

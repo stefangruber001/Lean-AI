@@ -4,6 +4,7 @@ import { CONFIG, HERO } from "../content";
 import { Container } from "./ui/Container";
 import { Button } from "./ui/Button";
 import { HeroBackgroundDark } from "./HeroBackground";
+import { CountUp } from "./ui/CountUp";
 
 // Kinetic headline: each word fades/rises in sequence.
 function KineticLine({
@@ -102,7 +103,12 @@ export function Hero() {
           >
             {HERO.stats.map((s) => (
               <div key={s.label} className="bg-ink/60 p-5 backdrop-blur-sm">
-                <dt className="font-display text-3xl font-semibold text-paper sm:text-4xl">{s.value}</dt>
+                <dt>
+                  <CountUp
+                    value={s.value}
+                    className="font-display text-3xl font-semibold text-paper sm:text-4xl"
+                  />
+                </dt>
                 <dd className="mt-1.5 text-xs leading-snug text-paper/55">{s.label}</dd>
               </div>
             ))}

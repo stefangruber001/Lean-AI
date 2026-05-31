@@ -52,7 +52,7 @@ export function Legal() {
               />
             </dl>
             <p className="mt-4 font-mono text-xs uppercase tracking-[0.1em] text-gray-3">
-              Bracketed values are placeholders — to be confirmed before public launch.
+              Registered address &amp; tax ID to be finalised before public launch.
             </p>
           </section>
 

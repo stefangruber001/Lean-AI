@@ -11,6 +11,7 @@ const Approach = lazy(() => import("./components/Approach").then((m) => ({ defau
 const Services = lazy(() => import("./components/Services").then((m) => ({ default: m.Services })));
 const Results = lazy(() => import("./components/Results").then((m) => ({ default: m.Results })));
 const About = lazy(() => import("./components/About").then((m) => ({ default: m.About })));
+const FAQ = lazy(() => import("./components/FAQ").then((m) => ({ default: m.FAQ })));
 const CTABand = lazy(() => import("./components/CTABand").then((m) => ({ default: m.CTABand })));
 const Contact = lazy(() => import("./components/Contact").then((m) => ({ default: m.Contact })));
 const Footer = lazy(() => import("./components/Footer").then((m) => ({ default: m.Footer })));
@@ -60,6 +61,7 @@ export default function App() {
           <Services />
           <Results />
           <About />
+          <FAQ />
           <CTABand />
           <Contact />
         </Suspense>

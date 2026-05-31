@@ -23,6 +23,7 @@ export const NAV: NavItem[] = [
   { label: "Engagements", href: "#engagements" },
   { label: "Results", href: "#results" },
   { label: "About", href: "#about" },
+  { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -165,6 +166,34 @@ export const ABOUT = {
   photo: "founder.jpg", // place at /public/founder.jpg
 } as const;
 
+export const FAQ = {
+  number: "06",
+  kicker: "Questions",
+  heading: "The things people ask first.",
+  items: [
+    {
+      q: "How is this different from a consultancy?",
+      a: "Consultants diagnose, present, and leave. I build the working system, prove it in your numbers, and hand your team full ownership — Lean rigor plus deployed AI, not a slide deck.",
+    },
+    {
+      q: "Is our data safe — and will this pass audit?",
+      a: "Yes. Everything is designed for regulated environments: the controls, validation, and documentation an audit expects are built in from the first step, not bolted on after.",
+    },
+    {
+      q: "What size of company do you work with?",
+      a: "Ambitious small and mid-sized manufacturers and operations teams — typically where one critical process is capping growth and there's appetite to fix it properly.",
+    },
+    {
+      q: "Will AI replace our people?",
+      a: "No. The goal is to remove the repetitive, low-value work so your team can do the work that needs judgment. Adoption by your people is the product — if they don't own it, it doesn't last.",
+    },
+    {
+      q: "How do engagements and fees work?",
+      a: "Every engagement is fixed scope, fixed fee — no open-ended retainers to start. We agree the outcome and the number up front, beginning with a discovery call.",
+    },
+  ],
+} as const;
+
 export const CTA_BAND = {
   heading: "Find your highest-ROI process in three weeks.",
   sub: "Start with a discovery call. We'll pressure-test where Lean and AI move the needle.",
@@ -172,7 +201,7 @@ export const CTA_BAND = {
 } as const;
 
 export const CONTACT = {
-  number: "06",
+  number: "07",
   kicker: "Contact",
   heading: "What process is costing you the most?",
   copy: "Tell me where your operation leaks time and money. I'll tell you honestly whether Lean and AI can move it.",
@@ -199,11 +228,11 @@ export const FOOTER = {
 //  public launch. Spain (LSSI-CE) + EU/GDPR expectations are reflected below.
 // =============================================================
 export const LEGAL = {
-  // Values that must be confirmed by the founder. Until then they render as
-  // visibly-bracketed placeholders so nothing false is published.
-  legalName: "<Full legal name / sole trader or company name>",
-  address: "<Street, postal code, city>, Spain",
-  vatId: "<NIF / VAT ID, e.g. ESX0000000X>",
+  // Values to be confirmed by the founder. Presented as clean placeholders
+  // (not broken brackets) until the real legal details are provided.
+  legalName: "Stefan Gruber",
+  address: "Barcelona, Spain — full registered address to be added",
+  vatId: "Spanish NIF / VAT ID — to be added",
   email: CONFIG.CONTACT_EMAIL,
   responsiblePerson: CONFIG.FOUNDER_NAME,
 
