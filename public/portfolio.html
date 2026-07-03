@@ -19,10 +19,11 @@
       * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
       html, body { margin: 0; }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         color: var(--ink);
         background: #fff;
         -webkit-font-smoothing: antialiased;
+        font-feature-settings: "tnum" 1, "lnum" 1; /* tabular lining figures — clean commas */
       }
       .wrap { max-width: 480px; margin: 0 auto; padding: 8px 20px 96px; }
 
@@ -49,9 +50,9 @@
       .info { margin-left: auto; width: 26px; height: 26px; border: 1.5px solid #cfd3d7; border-radius: 50%; color: #9aa0a6; display: grid; place-items: center; font-size: 15px; font-style: italic; font-family: Georgia, serif; }
 
       /* Value */
-      .value { font-size: 46px; font-weight: 600; letter-spacing: -1.5px; margin: 14px 0 6px; line-height: 1; }
-      .value .cents { font-size: 30px; letter-spacing: -0.5px; }
-      .gain { font-size: 19px; color: var(--ink); margin-bottom: 6px; }
+      .value { font-size: 47px; font-weight: 600; letter-spacing: -2px; margin: 16px 0 8px; line-height: 1.02; font-variant-numeric: tabular-nums lining-nums; }
+      .value .cents { font-size: 29px; letter-spacing: -0.5px; font-weight: 500; }
+      .gain { font-size: 18px; color: var(--ink); margin-bottom: 6px; line-height: 1.35; font-variant-numeric: tabular-nums; }
       .gain b { color: var(--green); font-weight: 600; }
 
       /* Chart */
@@ -78,12 +79,12 @@
       .ptabs .pt.sel { background: #eef2fb; color: var(--ib-blue); }
       .phead { display: grid; grid-template-columns: 1.2fr 1fr 1fr; font-size: 13px; color: var(--muted); padding: 10px 0 8px; border-bottom: 1px solid var(--line); }
       .phead .r { text-align: right; }
-      .prow { display: grid; grid-template-columns: 1.2fr 1fr 1fr; align-items: center; background: #d9f2e3; border-radius: 10px; padding: 16px 12px; margin-top: 12px; }
-      .prow .sym { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-      .prow .sub { display: block; font-size: 12px; font-weight: 400; color: #5a6b60; margin-top: 2px; }
-      .prow .pnl { text-align: right; font-size: 18px; font-weight: 600; color: var(--green); }
-      .prow .price { justify-self: end; background: #16833f; color: #fff; font-weight: 700; font-size: 17px; padding: 8px 14px; border-radius: 8px; }
-      .clock { font-size: 13px; }
+      .prow { display: grid; grid-template-columns: 1.15fr 1.1fr 0.75fr; align-items: center; gap: 8px; background: #daf1e2; border-radius: 12px; padding: 16px 14px; margin-top: 12px; }
+      .prow .sym { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+      .prow .sub { display: block; font-size: 11.5px; font-weight: 400; color: #5f7166; margin-top: 3px; letter-spacing: 0.1px; }
+      .prow .pnl { text-align: right; font-size: 16px; font-weight: 600; color: var(--green); font-variant-numeric: tabular-nums; line-height: 1.25; }
+      .prow .pnl .mv { display: block; font-size: 12.5px; font-weight: 400; color: #5f7166; margin-top: 3px; }
+      .prow .price { justify-self: end; background: #16833f; color: #fff; font-weight: 700; font-size: 16px; padding: 8px 12px; border-radius: 8px; font-variant-numeric: tabular-nums; }
 
       /* Bottom nav */
       .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding: 8px 0 max(10px, env(safe-area-inset-bottom)); max-width: 480px; margin: 0 auto; }
@@ -123,7 +124,7 @@
       </div>
 
       <div class="value">€10,500,625<span class="cents">.26</span></div>
-      <div class="gain"><b>€5,698,893.86 (118.68%)</b> past three months</div>
+      <div class="gain"><b>€5,698,802.84 (118.68%)</b> past three months</div>
 
       <!-- Chart -->
       <div class="chart">
@@ -176,8 +177,8 @@
         <span class="r">Last Price</span>
       </div>
       <div class="prow">
-        <span class="sym">VWCE <span class="clock">🕐🥧</span><span class="sub">VANG. FTSE AW USDA</span></span>
-        <span class="pnl">5.70M</span>
+        <span class="sym">VWCE<span class="sub">VANG. FTSE AW USDA · 63,356 sh</span></span>
+        <span class="pnl">+5,698,802.84<span class="mv">€10,500,623</span></span>
         <span class="price">165.74</span>
       </div>
 
