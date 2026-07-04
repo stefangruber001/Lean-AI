@@ -51,8 +51,8 @@
          big value cap ≈135px → 63px CSS; gain cap ≈50px → 23px CSS.
          --vfs is auto-fitted by JS so a longer figure fills the same width,
          mirroring IB's fit-to-width behavior (max 63px). */
-      .value { font-size: var(--vfs, 63px); font-weight: 600; letter-spacing: -2.5px; margin: 14px 0 8px; line-height: 1; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
-      .value .cents { font-size: 0.635em; letter-spacing: -1px; font-weight: 500; }
+      .value { font-size: var(--vfs, 44px); font-weight: 600; letter-spacing: -1.5px; margin: 14px 0 8px; line-height: 1.04; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+      .value .cents { font-size: 0.66em; letter-spacing: -0.5px; font-weight: 500; }
       .gain { font-size: 23px; color: var(--ink); margin-bottom: 6px; line-height: 1.3; font-variant-numeric: tabular-nums; min-height: 28px; }
       .gain b { color: var(--green); font-weight: 600; }
       .gain b.neg { color: var(--red); }
@@ -190,13 +190,13 @@
 
       // pct = period return; period label as shown under the value
       var TF = {
-        '1W':  { pct: 2.14,   label: 'past week',        seed: 3.1 },
-        'MTD': { pct: 4.63,   label: 'month to date',    seed: 5.7 },
-        '1M':  { pct: 9.82,   label: 'past month',       seed: 8.2 },
-        '3M':  { pct: 118.68, label: 'past three months', seed: 12.0 },
-        'YTD': { pct: 156.30, label: 'year to date',     seed: 15.4 },
-        '1Y':  { pct: 243.50, label: 'past year',        seed: 19.1 },
-        'All': { pct: 512.00, label: 'all time',         seed: 24.6 }
+        '1W':  { pct: 0.92,  label: 'past week',        seed: 3.1 },
+        'MTD': { pct: 2.10,  label: 'month to date',    seed: 5.7 },
+        '1M':  { pct: 4.80,  label: 'past month',       seed: 8.2 },
+        '3M':  { pct: 10.53, label: 'past three months', seed: 12.0 },
+        'YTD': { pct: 14.20, label: 'year to date',     seed: 15.4 },
+        '1Y':  { pct: 22.60, label: 'past year',        seed: 19.1 },
+        'All': { pct: 38.50, label: 'all time',         seed: 24.6 }
       };
 
       var eur = function (n) {
@@ -206,8 +206,12 @@
         return '€' + Math.round(n).toLocaleString('en-US');
       };
       var compact = function (n) {
-        if (n >= 1e6) return (n / 1e6).toFixed(n / 1e6 < 10 ? 1 : 0) + 'M';
-        if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+        if (n >= 1e6) {
+          var m = n / 1e6;
+          // one decimal unless it's a whole million (avoids "11M" appearing twice)
+          return (Math.abs(m - Math.round(m)) < 0.05 ? m.toFixed(0) : m.toFixed(1)) + 'M';
+        }
+        if (n >= 1e3) return Math.round(n / 1e3) + 'K';
         return Math.round(n).toString();
       };
 
@@ -274,19 +278,21 @@
         requestAnimationFrame(function () { lineEl.style.opacity = 1; areaEl.style.opacity = 1; });
       }
 
-      // IB fit-to-width: keep the value on one line at 63px, shrinking only if
-      // it would exceed the available width (like the real app with big numbers).
+      // IB fit-to-width: render the value on one line, scaled so it fills a
+      // COMFORTABLE target width (with side breathing room) — never edge-to-edge.
+      // Caps at 44px so short numbers don't look oversized on a phone.
       function fitValue() {
         var big = document.getElementById('bigValue');
-        var maxPx = 63, min = 30;
+        var maxPx = 44, min = 24;
+        // measure natural width at the max size
         big.style.setProperty('--vfs', maxPx + 'px');
-        var avail = big.parentElement.clientWidth;
-        // measure at max size, then scale down proportionally if overflowing
-        var wNow = big.scrollWidth;
-        if (wNow > avail) {
-          var scaled = Math.max(min, Math.floor(maxPx * avail / wNow));
-          big.style.setProperty('--vfs', scaled + 'px');
+        var natural = big.scrollWidth;
+        var target = big.parentElement.clientWidth * 0.92; // leave ~8% margin
+        var sizePx = maxPx;
+        if (natural > target) {
+          sizePx = Math.max(min, Math.floor(maxPx * target / natural));
         }
+        big.style.setProperty('--vfs', sizePx + 'px');
       }
 
       function renderValue() {
