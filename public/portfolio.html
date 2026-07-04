@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <title>Portfolio</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23fff'/%3E%3Cpath d='M8 22 L8 12 L12 12 L12 22 Z' fill='%23d81f2a'/%3E%3Cpath d='M8 10 A2 2 0 1 1 12 10 A2 2 0 1 1 8 10' fill='%23d81f2a'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23fff'/%3E%3Cpath d='M9 27 L9 13 L14 13 L14 27 Z' fill='%23d81f2a'/%3E%3Ccircle cx='11.5' cy='8.5' r='2.8' fill='%23d81f2a'/%3E%3C/svg%3E" />
     <style>
       :root {
         --ib-red: #d81f2a;
         --ib-blue: #1668e3;
         --green: #16924e;
+        --red: #cf2a2a;
         --ink: #1a1a1a;
         --muted: #8b9096;
         --line: #ececef;
@@ -23,11 +24,10 @@
         color: var(--ink);
         background: #fff;
         -webkit-font-smoothing: antialiased;
-        font-feature-settings: "tnum" 1, "lnum" 1; /* tabular lining figures — clean commas */
+        font-feature-settings: "tnum" 1, "lnum" 1;
       }
       .wrap { max-width: 480px; margin: 0 auto; padding: 8px 20px 96px; }
 
-      /* Top bar */
       .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 10px; }
       .brand { display: flex; align-items: center; gap: 10px; }
       .hamb { display: flex; flex-direction: column; gap: 4px; margin-right: 4px; }
@@ -41,43 +41,39 @@
       .dot { position: relative; }
       .dot::after { content: ""; position: absolute; top: -1px; right: -1px; width: 7px; height: 7px; background: var(--ib-red); border-radius: 50%; border: 1.5px solid #fff; }
 
-      /* Tabs */
       .vtabs { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
-      .vtabs .t { font-size: 21px; font-weight: 500; }
-      .vtabs .active { color: var(--ink); }
-      .vtabs .inactive { color: var(--muted); }
+      .vtabs .t { font-size: 21px; font-weight: 500; background: none; border: none; padding: 0; font-family: inherit; color: var(--muted); }
+      .vtabs .t.active { color: var(--ink); }
       .vsep { width: 1px; height: 20px; background: var(--line); }
       .info { margin-left: auto; width: 26px; height: 26px; border: 1.5px solid #cfd3d7; border-radius: 50%; color: #9aa0a6; display: grid; place-items: center; font-size: 15px; font-style: italic; font-family: Georgia, serif; }
 
-      /* Value */
       .value { font-size: 47px; font-weight: 600; letter-spacing: -2px; margin: 16px 0 8px; line-height: 1.02; font-variant-numeric: tabular-nums lining-nums; }
       .value .cents { font-size: 29px; letter-spacing: -0.5px; font-weight: 500; }
-      .gain { font-size: 18px; color: var(--ink); margin-bottom: 6px; line-height: 1.35; font-variant-numeric: tabular-nums; }
+      .gain { font-size: 18px; color: var(--ink); margin-bottom: 6px; line-height: 1.35; font-variant-numeric: tabular-nums; min-height: 24px; }
       .gain b { color: var(--green); font-weight: 600; }
+      .gain b.neg { color: var(--red); }
 
-      /* Chart */
       .chart { position: relative; margin: 10px -4px 4px; }
       .chart svg { width: 100%; display: block; }
-      .ylab { position: absolute; right: 2px; font-size: 13px; color: var(--muted); }
+      .chart .axis text { fill: var(--muted); font-size: 12px; }
+      .chart path.line { transition: opacity .18s ease; }
 
-      /* Timeframe */
-      .tf { display: flex; justify-content: space-between; align-items: center; margin: 6px 4px 0; }
-      .tf button { border: none; background: none; font-size: 15px; color: var(--muted); padding: 8px 6px; font-weight: 500; border-radius: 8px; }
-      .tf .sel { background: #eef2fb; color: var(--ib-blue); }
+      .tf { display: flex; justify-content: space-between; align-items: center; margin: 6px 0 0; }
+      .tf button { border: none; background: none; font-size: 15px; color: var(--muted); padding: 8px 6px; font-weight: 500; border-radius: 8px; font-family: inherit; transition: background .15s, color .15s; }
+      .tf button.sel { background: #eef2fb; color: var(--ib-blue); }
 
-      /* Actions */
       .actions { display: flex; gap: 12px; overflow-x: auto; padding: 22px 0 4px; scrollbar-width: none; }
       .actions::-webkit-scrollbar { display: none; }
-      .chip { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; border: 1px solid var(--chip-border); border-radius: 30px; padding: 14px 20px; font-size: 17px; font-weight: 500; color: var(--ink); background: #fff; }
+      .chip { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; border: 1px solid var(--chip-border); border-radius: 30px; padding: 14px 20px; font-size: 17px; font-weight: 500; color: var(--ink); background: #fff; font-family: inherit; }
+      .chip:active { background: #f4f5f7; }
       .chip svg { width: 20px; height: 20px; color: var(--ib-blue); }
       .chip.round { padding: 14px; }
 
-      /* Positions */
       h2.sec { font-size: 24px; font-weight: 700; margin: 30px 0 14px; }
       .ptabs { display: flex; gap: 10px; margin-bottom: 6px; }
-      .ptabs .pt { font-size: 14px; font-weight: 600; color: var(--muted); padding: 8px 12px; border-radius: 8px; letter-spacing: 0.2px; }
+      .ptabs .pt { font-size: 14px; font-weight: 600; color: var(--muted); padding: 8px 12px; border-radius: 8px; letter-spacing: 0.2px; background: none; border: none; font-family: inherit; transition: background .15s, color .15s; }
       .ptabs .pt.sel { background: #eef2fb; color: var(--ib-blue); }
-      .phead { display: grid; grid-template-columns: 1.2fr 1fr 1fr; font-size: 13px; color: var(--muted); padding: 10px 0 8px; border-bottom: 1px solid var(--line); }
+      .phead { display: grid; grid-template-columns: 1.15fr 1.1fr 0.75fr; font-size: 13px; color: var(--muted); padding: 10px 0 8px; border-bottom: 1px solid var(--line); }
       .phead .r { text-align: right; }
       .prow { display: grid; grid-template-columns: 1.15fr 1.1fr 0.75fr; align-items: center; gap: 8px; background: #daf1e2; border-radius: 12px; padding: 16px 14px; margin-top: 12px; }
       .prow .sym { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
@@ -86,7 +82,6 @@
       .prow .pnl .mv { display: block; font-size: 12.5px; font-weight: 400; color: #5f7166; margin-top: 3px; }
       .prow .price { justify-self: end; background: #16833f; color: #fff; font-weight: 700; font-size: 16px; padding: 8px 12px; border-radius: 8px; font-variant-numeric: tabular-nums; }
 
-      /* Bottom nav */
       .nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding: 8px 0 max(10px, env(safe-area-inset-bottom)); max-width: 480px; margin: 0 auto; }
       .nav a { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: var(--muted); text-decoration: none; }
       .nav a.on { color: var(--ib-blue); }
@@ -96,7 +91,6 @@
   </head>
   <body>
     <div class="wrap">
-      <!-- Top bar -->
       <div class="topbar">
         <div class="brand">
           <div class="hamb"><span></span><span></span><span></span></div>
@@ -115,81 +109,228 @@
         </div>
       </div>
 
-      <!-- Value / Performance -->
       <div class="vtabs">
-        <span class="t active">Value</span>
+        <button class="t active" id="tabValue">Value</button>
         <span class="vsep"></span>
-        <span class="t inactive">Performance</span>
+        <button class="t" id="tabPerf">Performance</button>
         <span class="info">i</span>
       </div>
 
-      <div class="value">€10,500,625<span class="cents">.26</span></div>
-      <div class="gain"><b>€5,698,802.84 (118.68%)</b> past three months</div>
+      <div class="value" id="bigValue"></div>
+      <div class="gain" id="gainLine"></div>
 
-      <!-- Chart -->
       <div class="chart">
-        <span class="ylab" style="top:6%">11M</span>
-        <span class="ylab" style="top:44%">8M</span>
-        <span class="ylab" style="top:86%">5M</span>
-        <svg viewBox="0 0 340 210" preserveAspectRatio="none" aria-hidden="true">
+        <svg id="chart" viewBox="0 0 340 214" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#1668e3" stop-opacity="0.14" />
               <stop offset="100%" stop-color="#1668e3" stop-opacity="0" />
             </linearGradient>
           </defs>
-          <path d="M0,185 L14,182 L28,183 L42,178 L56,180 L70,176 L84,170 L86,120 L100,122 L116,118 L132,120 L148,112 L150,110 L164,108 L172,72 L186,74 L200,68 L206,64 L214,66 L228,60 L236,40 L250,44 L264,38 L272,42 L286,36 L300,30 L316,26 L340,22
-                   L340,210 L0,210 Z" fill="url(#fill)" />
-          <path d="M0,185 L14,182 L28,183 L42,178 L56,180 L70,176 L84,170 L86,120 L100,122 L116,118 L132,120 L148,112 L150,110 L164,108 L172,72 L186,74 L200,68 L206,64 L214,66 L228,60 L236,40 L250,44 L264,38 L272,42 L286,36 L300,30 L316,26 L340,22"
-                fill="none" stroke="#1668e3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" />
+          <g class="axis" id="axis"></g>
+          <path class="area" id="area" fill="url(#fill)" />
+          <path class="line" id="line" fill="none" stroke="#1668e3" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" />
         </svg>
       </div>
 
-      <!-- Timeframe -->
-      <div class="tf">
-        <button>1W</button>
-        <button>MTD</button>
-        <button>1M</button>
-        <button class="sel">3M</button>
-        <button>YTD</button>
-        <button>1Y</button>
-        <button>All</button>
+      <div class="tf" id="tf">
+        <button data-k="1W">1W</button>
+        <button data-k="MTD">MTD</button>
+        <button data-k="1M">1M</button>
+        <button data-k="3M" class="sel">3M</button>
+        <button data-k="YTD">YTD</button>
+        <button data-k="1Y">1Y</button>
+        <button data-k="All">All</button>
       </div>
 
-      <!-- Actions -->
       <div class="actions">
-        <span class="chip round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
-        <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8c0-2-2-4-5-4S9 6 9 8c-2 0-4 1-4 3 0 2 2 3 3 3v3a2 2 0 004 0 2 2 0 004 0v-3c1 0 3-1 3-3 0-1-1-2-3-2z"/></svg> Deposit</span>
-        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg> PortfolioAnalyst</span>
-        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg> Trading Permissions</span>
+        <button class="chip round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 8c0-2-2-4-5-4S9 6 9 8c-2 0-4 1-4 3 0 2 2 3 3 3v3a2 2 0 004 0 2 2 0 004 0v-3c1 0 3-1 3-3 0-1-1-2-3-2z"/></svg> Deposit</button>
+        <button class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg> PortfolioAnalyst</button>
+        <button class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12l6 6L20 6"/></svg> Trading Permissions</button>
       </div>
 
-      <!-- Positions -->
       <h2 class="sec">Your Positions</h2>
-      <div class="ptabs">
-        <span class="pt">DAILY P&amp;L</span>
-        <span class="pt sel">UNREALIZED P&amp;L</span>
-        <span class="pt">MKT VALUE</span>
+      <div class="ptabs" id="ptabs">
+        <button class="pt" data-k="daily">DAILY P&amp;L</button>
+        <button class="pt sel" data-k="unreal">UNREALIZED P&amp;L</button>
+        <button class="pt" data-k="mkt">MKT VALUE</button>
       </div>
       <div class="phead">
         <span>Instrument</span>
-        <span class="r">Urlz P&amp;L / Mkt Val</span>
+        <span class="r" id="phMid">Urlz P&amp;L / Mkt Val</span>
         <span class="r">Last Price</span>
       </div>
       <div class="prow">
         <span class="sym">VWCE<span class="sub">VANG. FTSE AW USDA · 63,356 sh</span></span>
-        <span class="pnl">+5,698,802.84<span class="mv">€10,500,623</span></span>
+        <span class="pnl" id="posCell"></span>
         <span class="price">165.74</span>
       </div>
 
-      <!-- Bottom nav -->
       <nav class="nav">
         <a class="on" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13l4-4 3 3 5-6 4 4"/></svg>Home</a>
         <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 2v10l7 4"/></svg>Portfolio</a>
         <a href="#"><span class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 21h5v-5M21 3l-7 7M3 21l7-7"/></svg></span></a>
-        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/><path d="M18 17l2 2 3-3" transform="translate(-2 -1)"/></svg>Watchlist</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Watchlist</a>
         <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M11 3a13 13 0 000 16M3 11h16"/></svg>Markets</a>
       </nav>
     </div>
+
+    <script>
+      // ---- Model: current value is fixed; each timeframe has its own start ----
+      var TOTAL = 10500625.26;
+      var PX = 165.74;               // VWCE last price
+      var SHARES = Math.round(TOTAL / PX); // 63,356
+      var MKT = SHARES * PX;         // market value
+      var DAILY = 82140.55;          // today's P&L (mock)
+
+      // pct = period return; period label as shown under the value
+      var TF = {
+        '1W':  { pct: 2.14,   label: 'past week',        seed: 3.1 },
+        'MTD': { pct: 4.63,   label: 'month to date',    seed: 5.7 },
+        '1M':  { pct: 9.82,   label: 'past month',       seed: 8.2 },
+        '3M':  { pct: 118.68, label: 'past three months', seed: 12.0 },
+        'YTD': { pct: 156.30, label: 'year to date',     seed: 15.4 },
+        '1Y':  { pct: 243.50, label: 'past year',        seed: 19.1 },
+        'All': { pct: 512.00, label: 'all time',         seed: 24.6 }
+      };
+
+      var eur = function (n) {
+        return '€' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      };
+      var eur0 = function (n) {
+        return '€' + Math.round(n).toLocaleString('en-US');
+      };
+      var compact = function (n) {
+        if (n >= 1e6) return (n / 1e6).toFixed(n / 1e6 < 10 ? 1 : 0) + 'M';
+        if (n >= 1e3) return (n / 1e3).toFixed(0) + 'K';
+        return Math.round(n).toString();
+      };
+
+      // deterministic rising series from start..end (absolute euros)
+      function series(start, end, n, seed) {
+        var a = [], i, t, base, wig;
+        for (i = 0; i < n; i++) {
+          t = i / (n - 1);
+          base = start + (end - start) * Math.pow(t, 1.28);
+          wig = (Math.sin(t * 13 + seed) * 0.5 + Math.sin(t * 29 + seed * 1.7) * 0.3) / 100 * end;
+          a.push(base + wig);
+        }
+        a[0] = start; a[n - 1] = end;
+        return a;
+      }
+
+      // nice axis ticks (~3-5) covering [min,max]
+      function axis(min, max) {
+        var range = max - min, rough = range / 2.2;
+        var mag = Math.pow(10, Math.floor(Math.log10(rough)));
+        var norm = rough / mag;
+        var step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+        var lo = Math.floor(min / step) * step;
+        var hi = Math.ceil(max / step) * step;
+        var ticks = [], v;
+        for (v = lo; v <= hi + 1e-6; v += step) ticks.push(v);
+        return { lo: lo, hi: hi, ticks: ticks };
+      }
+
+      var W = 340, H = 214, PADT = 8, PADB = 14, PLOT = H - PADT - PADB;
+      var lineEl = document.getElementById('line');
+      var areaEl = document.getElementById('area');
+      var axisEl = document.getElementById('axis');
+
+      var state = { tf: '3M', vtab: 'value', ptab: 'unreal' };
+
+      function drawChart(key) {
+        var cfg = TF[key];
+        var gain = TOTAL * cfg.pct / (100 + cfg.pct);
+        var start = TOTAL - gain;
+        var pts = series(start, TOTAL, 30, cfg.seed);
+        var lo = Math.min.apply(null, pts), hi = Math.max.apply(null, pts);
+        var ax = axis(lo, hi);
+        var pmin = Math.min(ax.lo, lo), pmax = Math.max(ax.hi, hi);
+        var x = function (i) { return (i / (pts.length - 1)) * W; };
+        var y = function (v) { return PADT + PLOT - ((v - pmin) / (pmax - pmin)) * PLOT; };
+
+        var d = 'M' + x(0).toFixed(1) + ',' + y(pts[0]).toFixed(1);
+        for (var i = 1; i < pts.length; i++) d += ' L' + x(i).toFixed(1) + ',' + y(pts[i]).toFixed(1);
+        lineEl.setAttribute('d', d);
+        areaEl.setAttribute('d', d + ' L' + W + ',' + H + ' L0,' + H + ' Z');
+
+        // axis labels (right-aligned)
+        var html = '';
+        ax.ticks.forEach(function (v) {
+          if (v < pmin - 1e-6 || v > pmax + 1e-6) return;
+          var yy = y(v);
+          html += '<text x="338" y="' + (yy + 4).toFixed(1) + '" text-anchor="end">' + compact(v) + '</text>';
+        });
+        axisEl.innerHTML = html;
+
+        // brief fade for feedback
+        lineEl.style.opacity = 0.35; areaEl.style.opacity = 0.35;
+        requestAnimationFrame(function () { lineEl.style.opacity = 1; areaEl.style.opacity = 1; });
+      }
+
+      function renderValue() {
+        var cfg = TF[state.tf];
+        var gain = TOTAL * cfg.pct / (100 + cfg.pct);
+        var big = document.getElementById('bigValue');
+        var line = document.getElementById('gainLine');
+        var pctTxt = '+' + cfg.pct.toFixed(2) + '%';
+        if (state.vtab === 'value') {
+          var whole = Math.floor(TOTAL).toLocaleString('en-US');
+          var cents = TOTAL.toFixed(2).split('.')[1];
+          big.innerHTML = '€' + whole + '<span class="cents">.' + cents + '</span>';
+          line.innerHTML = '<b>' + eur(gain) + ' (' + pctTxt + ')</b> ' + cfg.label;
+        } else {
+          big.innerHTML = pctTxt;
+          line.innerHTML = '<b>' + eur(gain) + '</b> ' + cfg.label;
+        }
+      }
+
+      function renderPosition() {
+        var cell = document.getElementById('posCell');
+        var head = document.getElementById('phMid');
+        if (state.ptab === 'daily') {
+          head.textContent = 'Daily P&L';
+          cell.innerHTML = '+' + DAILY.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+                           '<span class="mv">' + eur0(MKT) + '</span>';
+        } else if (state.ptab === 'mkt') {
+          head.textContent = 'Mkt Value';
+          cell.innerHTML = eur0(MKT) + '<span class="mv">' + SHARES.toLocaleString('en-US') + ' sh</span>';
+        } else {
+          var gain = TOTAL * TF['3M'].pct / (100 + TF['3M'].pct); // lifetime-ish unrealized
+          head.textContent = 'Urlz P&L / Mkt Val';
+          cell.innerHTML = '+' + gain.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
+                           '<span class="mv">' + eur0(MKT) + '</span>';
+        }
+      }
+
+      // ---- wiring ----
+      document.getElementById('tf').addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        state.tf = b.dataset.k;
+        [].forEach.call(this.children, function (c) { c.classList.toggle('sel', c === b); });
+        drawChart(state.tf); renderValue();
+      });
+
+      function setVtab(which) {
+        state.vtab = which;
+        document.getElementById('tabValue').classList.toggle('active', which === 'value');
+        document.getElementById('tabPerf').classList.toggle('active', which === 'perf');
+        renderValue();
+      }
+      document.getElementById('tabValue').addEventListener('click', function () { setVtab('value'); });
+      document.getElementById('tabPerf').addEventListener('click', function () { setVtab('perf'); });
+
+      document.getElementById('ptabs').addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        state.ptab = b.dataset.k;
+        [].forEach.call(this.children, function (c) { c.classList.toggle('sel', c === b); });
+        renderPosition();
+      });
+
+      // init
+      drawChart('3M'); renderValue(); renderPosition();
+    </script>
   </body>
 </html>
